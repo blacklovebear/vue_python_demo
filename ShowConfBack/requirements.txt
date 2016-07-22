@@ -1,0 +1,8 @@
+flask
+flask-cors
+paramiko
+DBUtils
+MySQL-python
+webargs
+parsimonious
+tornado

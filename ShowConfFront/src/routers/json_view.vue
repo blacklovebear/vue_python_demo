@@ -1,0 +1,85 @@
+<style scoped>
+    @import '/node_modules/jquery-jsonview/dist/jquery.jsonview.css';
+</style>
+<template>
+    <div>
+      <h2 class="sub-header" style="display:inline-block">json格式的配置文件</h2>
+      <b>(主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}})</b>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="input-group">
+            <input type="text" class="form-control highlight-kw" placeholder="高亮关键字" value="{{$route.query.kw}}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" id="highlight-toggle" type="button" status="0" v-on:click.stop.prevent="toggle_highlight($event)">高亮/取消</button>
+              <button class="btn btn-default" type="button" v-on:click.stop.prevent="toggleBtn()">展开/折叠</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+
+
+      <hr>
+      <div id='json-content' conf-id="{{$route.params.conf_id}}"></div>
+    </div>
+</template>
+<script>
+  import "jquery-highlight";
+  import "jquery-jsonview";
+  import config from 'config';
+
+  module.exports = {
+    data: function(){
+      return {
+        confInfo: {}
+      }
+    },
+
+    methods: {
+      toggle_highlight: function(event){
+        var value = $('.highlight-kw').val();
+        var status = $(event.toElement).attr('status');
+        if (status === '0') {
+          $('#json-content').highlight(value);
+          $(event.toElement).attr('status', '1');
+        } else {
+          $('#json-content').unhighlight(value);
+          $(event.toElement).attr('status', '0');
+        }
+      },
+
+      toggleBtn:function(){
+        $('#json-content').JSONView('toggle');
+      }
+    },
+
+    ready: function () {
+      var self = this;
+      var conf_id = $('#json-content').attr('conf-id');
+      $.ajax({
+        url: config.baseUrl + '/parse/conf/?conf_id=' + conf_id ,
+        method: 'GET',
+        success: function(data){
+          // 文件信息
+          self.confInfo = data.file_info;
+
+          $('#json-content').JSONView(data.json);
+
+          setTimeout(function(){
+            // 如果关键字为空就没必要高亮
+            var value = $('.highlight-kw').val();
+            if (value) {
+              $('#highlight-toggle').trigger('click');
+            }
+          }, 500)
+
+        },
+        error: function(error){
+          alert(JSON.stringify(error));
+        }
+      });
+    }
+
+
+  }
+</script>

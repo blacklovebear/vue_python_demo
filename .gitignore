@@ -1,0 +1,6 @@
+.idea
+.idea/
+.DS_Store
+ShowConfFront/node_modules/
+.project
+*.pyc
