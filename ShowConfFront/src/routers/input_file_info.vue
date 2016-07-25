@@ -138,8 +138,11 @@
           success: function(data){
             self.status.code = data.code;
             self.status.message = data.message;
-            alert(data.message);
-            console.log(self)
+
+            if (data.code < 0){
+              alert(data.message);
+            }
+
             self.$router.go({ name: 'index'});
 
           },
@@ -156,7 +159,6 @@
       // 表示修改，会传当前记录的信息过来
       if (this.$route.query){
         _.merge(this.fileInfo, this.$route.query);
-        console.log(this.fileInfo)
       }
     }
 

@@ -66,9 +66,11 @@ def conf_info(args):
                                   (args['conf_id'],))
 
   if file_info and not file_info.get('conf_content'):
-    util.load_conf_info_to_db(file_info, pool)
+    load_result = util.load_conf_info_to_db(file_info, pool)
+  else:
+    load_result = {}
 
-  return jsonify({'data':file_info})
+  return jsonify({'data':file_info, 'load_result':load_result})
 
 
 
@@ -127,6 +129,16 @@ def load_conf(args):
   return jsonify(final)
 
 
+@app.route("/delete/conf/")
+@use_args({'conf_id': fields.Int(required=True)})
+def delete_conf(args):
+  """将一条配置信息从数据库中删除
+  """
+  util.db_execute(pool, "delete from conf_file_info where id = %s", (args['conf_id'], ) )
+
+  final = util.get_return_info(True)
+  return jsonify(final)
+
 
 @app.route('/input/file_info/', methods=['GET', 'POST'])
 @use_args({
@@ -171,10 +183,16 @@ def input_file_info(args):
   final = util.get_return_info(True)
   return jsonify(final)
 
+
 @app.route('/load/group/')
 def load_group():
+  """查看分组信息
+  """
   result = util.db_fetchall(pool, " select id, name from conf_group")
   return jsonify({'data':result})
+
+
+
 
 @app.route('/test/')
 @use_args({'sql':fields.Str(required=True)})

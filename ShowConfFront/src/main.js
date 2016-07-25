@@ -21,7 +21,9 @@ Vue.partial('listOptionPartial', "<a v-link=\"{name: 'detail', params: {conf_id:
               <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">Json</a>");
 
 Vue.partial('loadConfPartial', "<a v-on:click.stop.prevent='loadFileContent(entry.id)'>重新加载</a>");
-Vue.partial('operatePartial', "<a v-link=\"{name: 'inputFile', query:entry }\">修改</a>");
+
+Vue.partial('operatePartial', "<a v-link=\"{name: 'inputFile', query:entry }\">修改</a>| \
+        <a v-on:click.stop.prevent='deleteConf(entry.id)'>删除</a>");
 
 
 

@@ -54,9 +54,14 @@ def ssh_get_file_content(conf_info_dict):
   ssh = paramiko.SSHClient()
   ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-  ssh.connect(conf_info_dict.get('host_domain'),
-              username = conf_info_dict.get('host_user_name'),
-              key_filename = conf_info_dict.get('ssh_key_path'))
+  try:
+    ssh.connect(conf_info_dict.get('host_domain'),
+                username = conf_info_dict.get('host_user_name'),
+                key_filename = conf_info_dict.get('ssh_key_path'))
+  except Exception, e:
+    # 连接出错
+    error_info = str(e)
+    return error_info, ''
 
   stdin, stdout, stderr = ssh.exec_command("cat " + conf_info_dict.get('conf_file_path'))
   file_content =  stdout.readlines()

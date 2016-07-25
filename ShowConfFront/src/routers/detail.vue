@@ -19,9 +19,16 @@
             </span>
           </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
+
+        <div class="col-lg-4 col-lg-offset-3">
+            <button class="btn btn-primary" type="button"
+                      v-on:click.stop.prevent="loadFileContent($route.params.conf_id)">重新加载配置文件</button>
+        </div><!-- /.col-lg-6 -->
+
       </div><!-- /.row -->
 
       <hr>
+      <div>{{fileLoadResult.message}}</div>
       <pre id="conf-detail" conf-id="{{$route.params.conf_id}}">{{confInfo.conf_content}}</pre>
     </div>
 </template>
@@ -33,7 +40,8 @@
   module.exports = {
     data: function(){
       return {
-        confInfo: {}
+        confInfo: {},
+        fileLoadResult:{},
       }
     },
 
@@ -50,6 +58,21 @@
         }
       },
 
+      // 将文件内容从机器上加载到数据库
+      loadFileContent: function(conf_id){
+        $.ajax({
+          url: config.baseUrl + '/load_conf/?conf_id=' + conf_id ,
+          method: 'GET',
+          success: function(data){
+            console.log(data);
+            alert(data.message)
+          },
+          error: function(error){
+            alert(JSON.stringify(error));
+          }
+        });
+      }
+
     },
 
     ready: function () {
@@ -60,6 +83,7 @@
         method: 'GET',
         success: function(data){
           self.confInfo = data.data;
+          self.fileLoadResult = data.load_result;
 
           setTimeout(function(){
             // 如果关键字为空就没必要高亮
