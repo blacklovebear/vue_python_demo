@@ -107,23 +107,9 @@
       },
 
       // 将文件内容从机器上加载到数据库
-      deleteConf: function(confId){
-        var self = this;
-        var conclusion = confirm('确定删除?');
-        if (!conclusion) {
-          return
-        }
+      deleteRow: function(id){
+        this.$dispatch('delete-row', id);
 
-        $.ajax({
-          url: config.baseUrl + '/delete/conf/?conf_id=' + confId ,
-          method: 'GET',
-          success: function(data){
-            self.$dispatch('delete-row', confId);
-          },
-          error: function(error){
-            alert(JSON.stringify(error));
-          }
-        });
       }
     }
   }

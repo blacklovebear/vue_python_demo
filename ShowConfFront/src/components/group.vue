@@ -30,7 +30,7 @@
       loadGroupList: function(){
         var self = this;
         $.ajax({
-          url: config.baseUrl + '/load/group/',
+          url: config.baseUrl + '/groups',
           method: 'GET',
           success: function(data){
             self.groupList = data.data;

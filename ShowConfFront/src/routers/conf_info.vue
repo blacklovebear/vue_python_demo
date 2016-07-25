@@ -6,17 +6,19 @@
     .text-muted {
       color:#d9534f;
     }
+    .row h2 {
+      line-height: 0px;
+    }
 </style>
 <template>
     <div>
-      <!-- Example row of columns -->
-      <h2 class="sub-header">文件信息录入</h2>
-        <div class="alert"
-          v-show="typeof status.code !== 'undefined' "
-          v-bind:class="{'alert-success':status.code === 0, 'alert-danger':status.code < 0}">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <strong>{{status.message}}</strong>
-        </div>
+      <div class="row" style="margin-top:15px">
+        <h2 class="sub-header col-md-5">文件信息</h2>
+        <span class="col-md-1 col-md-offset-6">
+          <button class="btn btn-primary" v-on:click="back()">返回</button>
+        </span>
+      </div>
+
       <hr>
 
       <form>
@@ -107,6 +109,7 @@
     data: function(){
       return {
         fileInfo:{
+          id: 0,
           host_domain: '',
           host_ip: '',
           host_user_name: '',
@@ -123,17 +126,21 @@
     },
 
     methods: {
+      back: function(){
+        this.$router.go({name: 'index'});
+      },
       onSubmit: function(){
         var self = this;
-        _.forIn(self.fileInfo, function(value, key){
-          if (key !== 'group_id'){
-            self.fileInfo[key] = _.trim(value)
-          }
-        });
+
+        var confId = self.fileInfo.id;
+        var method = 'POST';
+        if (confId > 0) {
+          method = "PUT"
+        }
 
         $.ajax({
-          url: config.baseUrl + '/input/file_info/' ,
-          method: 'POST',
+          url: config.baseUrl + '/confs/' + confId ,
+          method: method,
           data: self.fileInfo,
           success: function(data){
             self.status.code = data.code;

@@ -1,8 +1,8 @@
 flask
 flask-cors
+flask-restful
 paramiko
 DBUtils
 MySQL-python
-webargs
 parsimonious
 tornado

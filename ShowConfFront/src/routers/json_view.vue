@@ -1,13 +1,16 @@
 <style scoped>
     @import '/node_modules/jquery-jsonview/dist/jquery.jsonview.css';
+    .conf-explain{
+      margin-left: 50px;
+    }
 </style>
 <template>
     <div>
       <h2 class="sub-header" style="display:inline-block">json格式的配置文件</h2>
-      <b>(主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}})</b>
+      <span class="conf-explain">主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}}</span>
 
       <div class="row">
-        <div class="col-lg-4">
+        <div class="col-md-6">
           <div class="input-group">
             <input type="text" class="form-control highlight-kw" placeholder="高亮关键字" value="{{$route.query.kw}}">
             <span class="input-group-btn">
@@ -15,7 +18,12 @@
               <button class="btn btn-default" type="button" v-on:click.stop.prevent="toggleBtn()">展开/折叠</button>
             </span>
           </div><!-- /input-group -->
-        </div><!-- /.col-lg-6 -->
+        </div><!-- /.col-md-6 -->
+
+        <div class="col-md-1 col-md-offset-5">
+            <button class="btn btn-primary" type="button"
+                      v-on:click.stop.prevent="back()">返回</button>
+        </div>
       </div><!-- /.row -->
 
 
@@ -36,6 +44,9 @@
     },
 
     methods: {
+      back: function(){
+        this.$router.go({name: 'index'});
+      },
       toggle_highlight: function(event){
         var value = $('.highlight-kw').val();
         var status = $(event.toElement).attr('status');
@@ -57,7 +68,7 @@
       var self = this;
       var conf_id = $('#json-content').attr('conf-id');
       $.ajax({
-        url: config.baseUrl + '/parse/conf/?conf_id=' + conf_id ,
+        url: config.baseUrl + '/parse/conf/' + conf_id ,
         method: 'GET',
         success: function(data){
           // 文件信息

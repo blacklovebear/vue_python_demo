@@ -17,13 +17,19 @@
                     <a v-link="{name: 'index'}">配置文件列表</a>
                 </li>
                 <li>
+                    <a v-link="{name: 'groupList'}">分组列表</a>
+                </li>
+                <!-- <li>
                     <a v-link="{name: 'detail', params: {conf_id: 3}}">详细信息</a>
                 </li>
                 <li>
                     <a v-link="{name: 'jsonview', params: {conf_id: 3}}">json格式</a>
+                </li> -->
+                <li>
+                    <a v-link="{name: 'confInfo'}">添加配置文件</a>
                 </li>
                 <li>
-                    <a v-link="{name: 'inputFile'}">配置文件录入</a>
+                    <a v-link="{name: 'groupInfo'}">增加分组</a>
                 </li>
 
             </ul>

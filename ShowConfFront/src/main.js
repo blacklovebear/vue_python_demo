@@ -22,9 +22,11 @@ Vue.partial('listOptionPartial', "<a v-link=\"{name: 'detail', params: {conf_id:
 
 Vue.partial('loadConfPartial', "<a v-on:click.stop.prevent='loadFileContent(entry.id)'>重新加载</a>");
 
-Vue.partial('operatePartial', "<a v-link=\"{name: 'inputFile', query:entry }\">修改</a>| \
-        <a v-on:click.stop.prevent='deleteConf(entry.id)'>删除</a>");
+Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>| \
+        <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
 
+Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>| \
+        <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
 
 
 Vue.use(VueRouter);
@@ -57,12 +59,25 @@ router.map({
         require(['./routers/json_view.vue'], resolve);
       }
     },
-    '/input/file': {
-      name: 'inputFile',
+    '/conf/info': {
+      name: 'confInfo',
       component: function (resolve) {
-        require(['./routers/input_file_info.vue'], resolve);
+        require(['./routers/conf_info.vue'], resolve);
       }
-    }
+    },
+    '/group/list': {
+      name: 'groupList',
+      component: function (resolve) {
+        require(['./routers/group_list.vue'], resolve);
+      }
+    },
+    '/group/info': {
+      name: 'groupInfo',
+      component: function (resolve) {
+        require(['./routers/group_info.vue'], resolve);
+      }
+    },
+
 });
 
 router.beforeEach(function () {

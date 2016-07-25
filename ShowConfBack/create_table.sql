@@ -2,7 +2,8 @@ use conf_show;
 
 CREATE TABLE IF NOT EXISTS conf_group(
   `id`          MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name          char(32)
+  name          char(32) not null,
+  comment       varchar(128)
 );
 
 CREATE TABLE IF NOT EXISTS conf_file_info(
