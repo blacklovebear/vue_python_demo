@@ -7,8 +7,9 @@ from flask_restful import Api, Resource, reqparse
 import MySQLdb
 from  DBUtils.PooledDB import PooledDB
 
-import util
 import erl_terms
+import util
+import config
 
 import sys
 reload(sys)  # Reload does the trick!
@@ -17,14 +18,15 @@ sys.setdefaultencoding('UTF8')
 app = Flask(__name__)
 CORS(app, origins = "*", methods = ['GET', 'HEAD', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'])
 
-
-pool = PooledDB(MySQLdb, 5, host="abj-elogic-test1.yunba.io",
-                    user="yunba",
-                    passwd="yunba321",
-                    db="conf_show",
-                    port=3306,
-                    charset='utf8',
-                    use_unicode=True)
+# DB pool
+pool = PooledDB(MySQLdb, 5,
+                host = config.mysql['host'],
+                user = config.mysql['user'],
+                passwd = config.mysql['passwd'],
+                db = config.mysql['db'],
+                port = config.mysql['port'],
+                charset = 'utf8',
+                use_unicode = True)
 
 
 class ConfList(Resource):
@@ -245,4 +247,8 @@ api.add_resource(Group, '/groups/<int:id>', endpoint = 'group')
 
 
 if __name__ == "__main__":
-  app.run(host='192.168.2.121', port=8888, debug=True)
+  app.run(host = config.server['host'], port = config.server['port'], debug = config.server['debug'])
+
+
+
+
