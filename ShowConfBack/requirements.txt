@@ -3,7 +3,7 @@
 
 -e https://github.com/machinezone/python_etf.git#egg=erl-terms
 
-paramiko
+paramiko==2.0.1
 parsimonious==0.6.2
 MySQL-python==1.2.5
 DBUtils==1.1
