@@ -2,5 +2,7 @@
 .idea/
 .DS_Store
 ShowConfFront/node_modules/
+ShowConfFront/dist
+ShowConfFront/dist/*
 .project
 *.pyc

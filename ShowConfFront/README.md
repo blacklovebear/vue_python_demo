@@ -1,9 +1,8 @@
-#vue-vueRouter-webpack
-> 本项目可以帮你快速搭建一个基于Vue的单页面富应用,但这并不意味着是最佳实践,所有的目录结构和webpack配置都可以根据自己需要修改
+#show-conf-front
+> 前端采用Vue + webpack + Vue-router 构建的单页应用。具体项目依赖请查看package.json
 
 ##目录结构
 <pre>
-│  .gitignore          # 忽略文件,比如 node_modules
 │  package.json        # 项目配置
 │  README.md           # 项目说明
 │  index.html          # 首页
