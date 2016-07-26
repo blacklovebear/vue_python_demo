@@ -124,7 +124,7 @@ def load_conf_info_to_db(file_info, pool):
   if error_info:
     final = get_return_info(False, str(error_info))
   else:
-    db_execute(pool, "update conf_file_info set conf_content = %s where id =%s ",
+    db_execute(pool, "update conf_file_info set conf_content = %s, last_ch_time = now() where id =%s ",
                      (''.join(file_content), file_info['id']) )
     final = get_return_info(True)
 

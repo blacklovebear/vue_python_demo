@@ -51,8 +51,8 @@
         // 表格过滤搜索
         searchQuery: '',
 
-        gridColumns: ['id', 'name', 'comment', 'operate'],
-        gridDisplayNames: { id: '分组ID', name: '分组名称', comment: '备注信息', operate: '操作'},
+        gridColumns: ['id', 'name', 'conf_file_path', 'comment', 'operate'],
+        gridDisplayNames: { id: '分组ID', name: '分组名称', conf_file_path:'配置文件路径', comment: '备注信息', operate: '操作'},
         moreOperation:{
           operate: 'groupPartial',
         },

@@ -21,7 +21,7 @@
         <div class="form-group row">
           <label for="name" class="col-sm-2 form-control-label">分组名称</label>
           <div class="col-sm-6">
-            <input type="text" class="form-control" id="name" v-model="groupInfo.name" placeholder="eg:abj-elogic-test1.yunba.io">
+            <input type="text" class="form-control" id="name" v-model="groupInfo.name" placeholder="">
             <small class="text-muted">
               和机器IP任选一个
             </small>
@@ -29,9 +29,16 @@
         </div>
 
         <div class="form-group row">
+          <label for="conf_file_path" class="col-sm-2 form-control-label">配置文件路径<i class="text-muted">*</i></label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="conf_file_path" v-model="groupInfo.conf_file_path" placeholder="~/test_conf_show/test.erl">
+          </div>
+        </div>
+
+        <div class="form-group row">
           <label for="comment" class="col-sm-2 form-control-label">备注信息</label>
           <div class="col-sm-6">
-            <input type="text" class="form-control" id="comment" v-model="groupInfo.comment" placeholder="127.0.0.1">
+            <input type="text" class="form-control" id="comment" v-model="groupInfo.comment" placeholder="">
           </div>
         </div>
 
@@ -55,6 +62,7 @@
         groupInfo:{
           id: 0,
           name: '',
+          conf_file_path:'',
           comment: '',
         },
       }
@@ -78,9 +86,9 @@
           success: function(data){
             if (data.code < 0){
               alert(data.message);
+            } else {
+              self.$router.go({ name: 'groupList'});
             }
-
-            self.$router.go({ name: 'groupList'});
 
           },
           error: function(error){

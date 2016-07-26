@@ -61,21 +61,6 @@
           <div class="col-sm-6">
             <input type="text" class="form-control" id="host_pass" v-model="fileInfo.host_pass" placeholder="密码">
           </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="conf_file_path" class="col-sm-2 form-control-label">配置文件路径<i class="text-muted">*</i></label>
-          <div class="col-sm-6">
-            <input type="text" class="form-control" id="conf_file_path" v-model="fileInfo.conf_file_path" placeholder="~/test_conf_show/test.erl">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="service_name" class="col-sm-2 form-control-label">所属服务名称</label>
-          <div class="col-sm-6">
-            <input type="text" class="form-control" id="service_name" v-model="fileInfo.service_name" placeholder="服务名">
-          </div>
-        </div>
 
         <div class="form-group row">
           <label for="comment" class="col-sm-2 form-control-label">备注信息</label>
@@ -116,7 +101,6 @@
           ssh_key_path: '',
           host_pass: '',
           conf_file_path: '',
-          service_name: '',
           comment: '',
           group_id: 0,
         },
@@ -148,16 +132,14 @@
 
             if (data.code < 0){
               alert(data.message);
+            } else {
+              self.$router.go({ name: 'index'});
             }
-
-            self.$router.go({ name: 'index'});
-
           },
           error: function(error){
             alert(JSON.stringify(error));
           }
         });
-
 
       }
     },

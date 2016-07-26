@@ -60,12 +60,6 @@
           | filterBy filterKey
           | orderBy sortKey sortOrders[sortKey]">
           <td v-for="key in columns">
-            <!-- id跳转到详细 -->
-            <!-- <span v-if="key === 'id'">
-              <a v-link="{name: 'detail', params: {conf_id: entry[key]}}">详情</a>|
-              <a v-link="{name: 'jsonview', params: {conf_id: entry[key]}}">Json</a>
-            </span>
-            <span v-else>{{entry[key]}}</span> -->
             <span v-if="typeof moreOperation[key] !== 'undefined'">
               <partial :name="moreOperation[key]"></partial>
             </span>

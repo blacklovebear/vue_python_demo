@@ -65,11 +65,9 @@
         keyWord:'',
         group: 0,
 
-        gridColumns: ['host_user_name', 'service_name', 'host_domain',
+        gridColumns: ['host_domain',
                       'conf_file_path', 'last_ch_time', 'id', 'operate'],
-        gridDisplayNames: { host_user_name: '用户名',
-                            service_name: '服务名',
-                            host_domain: "所在服务器",
+        gridDisplayNames: { host_domain: "所在服务器",
                             conf_file_path: '配置文件路径',
                             last_ch_time: '最近同步时间',
                             id: '查看',
