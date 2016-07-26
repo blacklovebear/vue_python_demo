@@ -2,7 +2,7 @@
 > 本项目为配置管理系统的后端，使用Python Flask 的restful接口开发
 
 ##目录结构
-<pre>
+```
 │  create_table.sql    # 数据库表创建文件
 │  requirements.txt    # python 安装依赖文件
 │  config.py           # 后端配置文件，不上库
@@ -11,7 +11,7 @@
 │  restful.py          # restful API接口
 │  run.py              # 项目运行文件
 │  util.py             # 工具函数文件
-</pre>
+```
 
 ##安装
 ```

@@ -2,7 +2,7 @@
 > 前端采用Vue + webpack + Vue-router 构建的单页应用。具体项目依赖请查看package.json
 
 ##目录结构
-<pre>
+```
 │  package.json        # 项目配置
 │  README.md           # 项目说明
 │  index.html          # 首页
@@ -42,7 +42,7 @@
     │    └─ reset.css  # 页面初始化css
     │
     └─fonts            # 放置iconfont字体
-</pre>
+```
 
 
 ##说明
