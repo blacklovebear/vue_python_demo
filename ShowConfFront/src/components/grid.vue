@@ -82,7 +82,7 @@
             <span class="sr-only">Previous</span>
           </a>
         </li>
-        <li class="page-item" v-for="index in pagination.total">
+        <li class="page-item" v-for="index in total">
           <a class="page-link" v-on:click.stop.prevent="gotoPage(index + 1)">{{index + 1}}</a>
         </li>
 
@@ -119,15 +119,10 @@
       return {
         sortKey: '',
         sortOrders: sortOrders,
+        // 每页的行数
+        perPage: 15,
 
-        pagination: {
-          total: 0, perPage: 15,
-          currentPage: 1
-        },
-
-        // 分页数据
-        pageData: [],
-
+        currentPage: 1,
       }
     },
 
@@ -135,15 +130,23 @@
       filteredData () {
         const filter = Vue.filter('filterBy')
         return filter(this.gridData, this.filterKey)
-      }
-    },
+      },
 
-    watch: {
-      filteredData : function(value){
-        this.pagination.total = _.ceil(this.filteredData.length * 1.0 / this.pagination.perPage);
-        this.pagination.currentPage = 1;
-        this.getPageData();
-      }
+      pageData () {
+        var start = (this.currentPage - 1) * this.perPage;
+        var end = this.currentPage * this.perPage;
+        var realEnd = end > this.filteredData.length ? this.filteredData.length : end;
+
+        return _.slice(this.filteredData, start, realEnd);
+
+      },
+      // 总页数
+      total() {
+        // 如果总页数发生改变，比较将当前选中的页数初始化为1
+        this.currentPage = 1;
+        return _.ceil(this.filteredData.length * 1.0 / this.perPage);
+      },
+
     },
 
     methods: {
@@ -155,37 +158,23 @@
       // 将文件内容从机器上加载到数据库
       deleteRow: function(id){
         this.$dispatch('delete-row', id);
-
-      },
-
-      getPageData: function(){
-        var start = (this.pagination.currentPage - 1) * this.pagination.perPage;
-        var end = this.pagination.currentPage * this.pagination.perPage;
-        var realEnd = end > this.filteredData.length ? this.filteredData.length : end;
-
-        this.pageData = _.slice(this.filteredData, start, realEnd);
       },
 
       nextPage: function(){
-        var current = this.pagination.currentPage;
-        var total = this.pagination.total;
-
-        this.pagination.currentPage =  current + 1 > total ? total : current + 1;
-        this.getPageData();
+        var current = this.currentPage;
+        var total = this.total;
+        this.currentPage =  current + 1 > total ? total : current + 1;
       },
 
       gotoPage: function(page){
-        var total = this.pagination.total;
-        this.pagination.currentPage =  page > total || page < 1 ? 1 : page;
-        this.getPageData();
+        var total = this.total;
+        this.currentPage =  page > total || page < 1 ? 1 : page;
       },
 
       prePage: function(){
-        var current = this.pagination.currentPage;
-        var total = this.pagination.total;
-
-        this.pagination.currentPage =  current - 1 < 1 ? 1 : current - 1;
-        this.getPageData();
+        var current = this.currentPage;
+        var total = this.total;
+        this.currentPage =  current - 1 < 1 ? 1 : current - 1;
       }
 
     },
