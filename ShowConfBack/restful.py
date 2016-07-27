@@ -65,6 +65,8 @@ class ConfList(Resource):
       sql += ' and a.conf_content like %s '
       sql_param.append( '%' + kw + '%' )
 
+    sql += ' order by a.host_domain'
+
     result = util.db_fetchall(pool, sql, tuple(sql_param))
     return {'data':result}
 
@@ -181,7 +183,7 @@ class LoadConf(Resource):
 
 class GroupList(Resource):
   def get(self):
-    result = util.db_fetchall(pool, "select * from conf_group")
+    result = util.db_fetchall(pool, "select * from conf_group order by name")
     return {'data':result}
 
 

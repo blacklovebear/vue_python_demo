@@ -6,6 +6,9 @@
     .text-muted {
       color:#d9534f;
     }
+    .row h2 {
+      line-height: 0px;
+    }
 </style>
 <template>
     <div>

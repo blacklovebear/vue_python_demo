@@ -1,11 +1,14 @@
 <style scoped>
     @import '../styles/common.css';
+    #menu-toggle{
+        position: absolute;
+        top: 10px;
+    }
 </style>
 <template>
 
   <div id="wrapper">
 
-        <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
@@ -19,12 +22,6 @@
                 <li>
                     <a v-link="{name: 'groupList'}">分组列表</a>
                 </li>
-                <!-- <li>
-                    <a v-link="{name: 'detail', params: {conf_id: 3}}">详细信息</a>
-                </li>
-                <li>
-                    <a v-link="{name: 'jsonview', params: {conf_id: 3}}">json格式</a>
-                </li> -->
                 <li>
                     <a v-link="{name: 'confInfo'}">添加配置文件</a>
                 </li>
@@ -34,18 +31,15 @@
 
             </ul>
         </div>
-        <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-          <a href="#menu-toggle" class="btn btn-default" id="menu-toggle" v-on:click.stop.prevent="toggleClass()">侧边栏显隐</a>
+          <a href="#menu-toggle" id="menu-toggle" v-on:click.stop.prevent="toggleClass()">侧边栏显隐</a>
           <router-view></router-view>
 
         </div>
-        <!-- /#page-content-wrapper -->
 
     </div>
-    <!-- /#wrapper -->
 
 
 </template>
