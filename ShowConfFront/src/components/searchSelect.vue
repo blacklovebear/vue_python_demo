@@ -749,25 +749,25 @@
 
   @media only screen and (max-width: 767px) {
     .ui.search.dropdown .menu {
-      max-height: 7.58571429rem;
+      max-height: 300px;
     }
   }
 
   @media only screen and (min-width: 768px) {
     .ui.search.dropdown .menu {
-      max-height: 10.11428571rem;
+      max-height: 320px;
     }
   }
 
   @media only screen and (min-width: 992px) {
     .ui.search.dropdown .menu {
-      max-height: 15.17142857rem;
+      max-height: 400px;
     }
   }
 
   @media only screen and (min-width: 1920px) {
     .ui.search.dropdown .menu {
-      max-height: 20.22857143rem;
+      max-height: 450px;
     }
   }
 

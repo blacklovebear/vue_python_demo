@@ -17,7 +17,7 @@
       <div class="row">
           <div class="col-md-4">
               <div class="form-inline form-group">
-                  <label>当前页搜索:</label>
+                  <label>表格内搜索:</label>
                   <input v-model="searchQuery" class="form-control">
               </div>
           </div>
@@ -51,8 +51,8 @@
         // 表格过滤搜索
         searchQuery: '',
 
-        gridColumns: ['id', 'name', 'conf_file_path', 'comment', 'operate'],
-        gridDisplayNames: { id: '分组ID', name: '分组名称', conf_file_path:'配置文件路径', comment: '备注信息', operate: '操作'},
+        gridColumns: ['name', 'conf_file_path', 'comment', 'operate'],
+        gridDisplayNames: {name: '分组名称', conf_file_path:'配置文件路径', comment: '备注信息', operate: '操作'},
         moreOperation:{
           operate: 'groupPartial',
         },

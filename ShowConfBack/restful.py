@@ -65,6 +65,8 @@ class ConfList(Resource):
       sql += ' and a.conf_content like %s '
       sql_param.append( '%' + kw + '%' )
 
+    sql += ' order by a.host_domain'
+
     result = util.db_fetchall(pool, sql, tuple(sql_param))
     return {'data':result}
 
@@ -156,7 +158,7 @@ class ParseConf(Resource):
 
     conf_file_path = file_info.get('conf_file_path')
     # 是 erl文件才解析
-    if conf_file_path and conf_file_path.endswith('.erl'):
+    if conf_file_path:
       try:
         tuple_list = erl_terms.decode(file_info['conf_content'])
         convert_result = util.convert_tuple_to_map(tuple_list, 'data')
@@ -181,7 +183,7 @@ class LoadConf(Resource):
 
 class GroupList(Resource):
   def get(self):
-    result = util.db_fetchall(pool, "select * from conf_group")
+    result = util.db_fetchall(pool, "select * from conf_group order by name")
     return {'data':result}
 
 

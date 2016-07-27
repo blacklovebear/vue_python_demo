@@ -77,7 +77,7 @@
     <nav>
       <ul class="pagination pagination-sm">
         <li class="page-item">
-          <a class="page-link" v-on:click.stop.prevent='perPage()' aria-label="Previous">
+          <a class="page-link" v-on:click.stop.prevent='prePage()' aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
             <span class="sr-only">Previous</span>
           </a>
@@ -98,6 +98,8 @@
 </template>
 <script>
   import config from 'config';
+  import Vue from 'vue';
+
   module.exports = {
     replace: true,
     props: {
@@ -123,14 +125,22 @@
           currentPage: 1
         },
 
+        // 分页数据
         pageData: [],
 
       }
     },
 
+    computed: {
+      filteredData () {
+        const filter = Vue.filter('filterBy')
+        return filter(this.gridData, this.filterKey)
+      }
+    },
+
     watch: {
-      gridData : function(value){
-        this.pagination.total = _.ceil(this.gridData.length * 1.0 / this.pagination.perPage);
+      filteredData : function(value){
+        this.pagination.total = _.ceil(this.filteredData.length * 1.0 / this.pagination.perPage);
         this.pagination.currentPage = 1;
         this.getPageData();
       }
@@ -151,9 +161,9 @@
       getPageData: function(){
         var start = (this.pagination.currentPage - 1) * this.pagination.perPage;
         var end = this.pagination.currentPage * this.pagination.perPage;
-        var realEnd = end > this.gridData.length ? this.gridData.length : end;
+        var realEnd = end > this.filteredData.length ? this.filteredData.length : end;
 
-        this.pageData = _.slice(this.gridData, start, realEnd);
+        this.pageData = _.slice(this.filteredData, start, realEnd);
       },
 
       nextPage: function(){
@@ -170,7 +180,7 @@
         this.getPageData();
       },
 
-      perPage: function(){
+      prePage: function(){
         var current = this.pagination.currentPage;
         var total = this.pagination.total;
 
