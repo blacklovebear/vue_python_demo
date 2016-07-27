@@ -17,7 +17,7 @@
       <div class="row">
           <div class="col-md-4">
               <div class="form-inline form-group">
-                  <label>表格内搜索:</label>
+                  <label>当前页搜索:</label>
                   <input v-model="searchQuery" class="form-control">
               </div>
           </div>
@@ -26,7 +26,7 @@
       <div class="table-responsive">
         <div class="vuetable-wrapper">
            <yunba-grid
-            :data="gridData"
+            :grid-data="gridData"
             :columns="gridColumns"
             :display-names="gridDisplayNames"
             :more-operation="moreOperation"

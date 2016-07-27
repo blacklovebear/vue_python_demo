@@ -37,6 +37,11 @@
     border-right: 4px solid transparent;
     border-top: 4px solid #000;
   }
+
+  /*分页*/
+  .pagination {
+    margin: 0px;
+  }
 </style>
 <template>
 
@@ -56,7 +61,7 @@
       </thead>
       <tbody>
         <tr v-for="
-          entry in data
+          entry in pageData
           | filterBy filterKey
           | orderBy sortKey sortOrders[sortKey]">
           <td v-for="key in columns">
@@ -69,6 +74,26 @@
         </tr>
       </tbody>
     </table>
+    <nav>
+      <ul class="pagination pagination-sm">
+        <li class="page-item">
+          <a class="page-link" v-on:click.stop.prevent='perPage()' aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" v-for="index in pagination.total">
+          <a class="page-link" v-on:click.stop.prevent="gotoPage(index + 1)">{{index + 1}}</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link" v-on:click.stop.prevent="nextPage()" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 
 </template>
 <script>
@@ -76,7 +101,7 @@
   module.exports = {
     replace: true,
     props: {
-      data: Array,
+      gridData: Array,
       columns: Array,
       filterKey: String,
       displayNames:Object,
@@ -91,9 +116,26 @@
       })
       return {
         sortKey: '',
-        sortOrders: sortOrders
+        sortOrders: sortOrders,
+
+        pagination: {
+          total: 0, perPage: 15,
+          currentPage: 1
+        },
+
+        pageData: [],
+
       }
     },
+
+    watch: {
+      gridData : function(value){
+        this.pagination.total = _.ceil(this.gridData.length * 1.0 / this.pagination.perPage);
+        this.pagination.currentPage = 1;
+        this.getPageData();
+      }
+    },
+
     methods: {
       sortBy: function (key) {
         this.sortKey = key
@@ -104,7 +146,38 @@
       deleteRow: function(id){
         this.$dispatch('delete-row', id);
 
+      },
+
+      getPageData: function(){
+        var start = (this.pagination.currentPage - 1) * this.pagination.perPage;
+        var end = this.pagination.currentPage * this.pagination.perPage;
+        var realEnd = end > this.gridData.length ? this.gridData.length : end;
+
+        this.pageData = _.slice(this.gridData, start, realEnd);
+      },
+
+      nextPage: function(){
+        var current = this.pagination.currentPage;
+        var total = this.pagination.total;
+
+        this.pagination.currentPage =  current + 1 > total ? total : current + 1;
+        this.getPageData();
+      },
+
+      gotoPage: function(page){
+        var total = this.pagination.total;
+        this.pagination.currentPage =  page > total || page < 1 ? 1 : page;
+        this.getPageData();
+      },
+
+      perPage: function(){
+        var current = this.pagination.currentPage;
+        var total = this.pagination.total;
+
+        this.pagination.currentPage =  current - 1 < 1 ? 1 : current - 1;
+        this.getPageData();
       }
-    }
+
+    },
   }
 </script>

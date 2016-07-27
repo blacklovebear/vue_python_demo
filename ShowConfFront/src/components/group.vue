@@ -1,14 +1,9 @@
 <style scoped>
 </style>
 <template>
-
-    <select class="form-control" v-model="group" v-on:change="onChange()">
-      <option :value="0">请选择分组</option>
-
-      <option v-for="item in groupList" :value="item.id">
-        {{item.name}}
-      </option>
-    </select>
+    <select-search class="form-control"
+      :select-options="selectOptions"
+      :on-select="selectedItem"></select-search>
 
 </template>
 <script>
@@ -18,13 +13,24 @@
 
     data: function () {
       return {
-        groupList:[],
+        selectOptions: [],
       }
     },
 
     methods: {
-      onChange: function(){
+      selectedItem (item) {
+        this.group = item.value;
         this.$dispatch('group-change', this.group);
+        this.searchText = '';
+      },
+
+      setSelectOptions: function(responseData){
+        var self = this;
+        var tempList = _.map(responseData, function(x){
+          return {value: x.id, text: x.name, selected: x.id === self.group ? true : false}
+        })
+
+        self.selectOptions = _.concat([{value:0, text:'选择分组', selected: 0 === self.group ? true : false}], tempList);
       },
 
       loadGroupList: function(){
@@ -34,6 +40,8 @@
           method: 'GET',
           success: function(data){
             self.groupList = data.data;
+            self.setSelectOptions(data.data);
+
           },
           error: function(error){
             alert(JSON.stringify(error));

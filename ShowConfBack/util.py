@@ -46,6 +46,18 @@ def db_execute(pool, sql, param = ()):
   cur.close()
   conn.close()
 
+def db_executemany(pool, sql, param = ()):
+  """数据库执行sql
+  """
+  conn = pool.connection()
+  cur = conn.cursor();
+  cur.executemany(sql, param)
+
+  print '受影响的行数', cur.rowcount
+  conn.commit()
+
+  cur.close()
+  conn.close()
 
 def ssh_get_file_content(conf_info_dict):
   """

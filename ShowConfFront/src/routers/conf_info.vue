@@ -61,6 +61,7 @@
           <div class="col-sm-6">
             <input type="text" class="form-control" id="host_pass" v-model="fileInfo.host_pass" placeholder="密码">
           </div>
+        </div>
 
         <div class="form-group row">
           <label for="comment" class="col-sm-2 form-control-label">备注信息</label>
