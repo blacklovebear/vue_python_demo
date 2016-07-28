@@ -1,13 +1,13 @@
 # This is an implicit value, here for clarity
---index https://pypi.python.org/simple/
+# --index https://pypi.python.org/simple/
 
--e https://github.com/machinezone/python_etf.git#egg=erl-terms
+git+https://github.com/machinezone/python_etf.git#egg=erl_terms
 
 paramiko==2.0.1
 parsimonious==0.6.2
 MySQL-python==1.2.5
 DBUtils==1.1
-erl-terms==0.1.1
+#erl-terms==0.1.1
 Flask==0.11.1
 Flask-Cors==2.1.2
 Flask-RESTful==0.3.5
