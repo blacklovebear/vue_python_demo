@@ -5,7 +5,7 @@
 ```
 │  create_table.sql    # 数据库表创建文件
 │  requirements.txt    # python 安装依赖文件
-│  config.py           # 后端配置文件，不上库
+│  config.py           # 后端配置文件
 │  README.md           # 项目说明
 │  index.html          # 首页
 │  restful.py          # restful API接口
@@ -20,7 +20,7 @@ sudo pip install -r requirements.txt
 
 ##说明
 ```
-config.py 由于不在库上，需要自己新建文件并配置以下内容：
+config.py 中的配置内容根据你自身的需要修改
 # mysql server info
 mysql = {
   'host': "your_host",

@@ -4,6 +4,5 @@
 ShowConfFront/node_modules/
 ShowConfFront/dist
 ShowConfFront/dist/*
-ShowConfBack/config.py
 .project
 *.pyc
