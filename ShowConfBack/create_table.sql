@@ -10,6 +10,13 @@ CREATE TABLE IF NOT EXISTS conf_group(
   FOREIGN KEY (parent) REFERENCES conf_group(id) ON DELETE CASCADE
 );
 
+-- 暂时没有使用 可以删除
+CREATE TABLE IF NOT EXISTS conf_group_relation(
+  ancestor_id   MEDIUMINT NOT NULL REFERENCES conf_group(id),
+  descendant_id MEDIUMINT NOT NULL REFERENCES conf_group(id),
+  PRIMARY KEY (ancestor_id, descendant_id)
+);
+
 CREATE TABLE IF NOT EXISTS conf_file_info(
   `id`            MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   host_domain     varchar(64),                      -- 所在机器域名

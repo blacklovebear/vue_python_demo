@@ -1,9 +1,7 @@
 <style scoped>
 </style>
 <template>
-    <select-search class="form-control"
-      :select-options="selectOptions"
-      :on-select="selectedItem"></select-search>
+    <tree-select :on-select="onSelect" class="form-control" :tree-data="treeData"></tree-select>
 
 </template>
 <script>
@@ -13,24 +11,14 @@
 
     data: function () {
       return {
-        selectOptions: [],
+        treeData: [],
       }
     },
 
     methods: {
-      selectedItem (item) {
-        this.group = item.value;
+      onSelect (item) {
+        this.group = item.id;
         this.$dispatch('group-change', this.group);
-        this.searchText = '';
-      },
-
-      setSelectOptions: function(responseData){
-        var self = this;
-        var tempList = _.map(responseData, function(x){
-          return {value: x.id, text: x.name, selected: x.id === self.group ? true : false}
-        })
-
-        self.selectOptions = _.concat([{value:0, text:'选择分组', selected: 0 === self.group ? true : false}], tempList);
       },
 
       loadGroupList: function(){
@@ -39,9 +27,7 @@
           url: config.baseUrl + '/groups',
           method: 'GET',
           success: function(data){
-            self.groupList = data.data;
-            self.setSelectOptions(data.data);
-
+            self.treeData = data.data;
           },
           error: function(error){
             alert(JSON.stringify(error));

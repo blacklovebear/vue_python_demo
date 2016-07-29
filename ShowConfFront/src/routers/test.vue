@@ -18,12 +18,12 @@
     data: function(){
       return {
         treeData: [
-                      { name: 'wewewe', children: [] },
-                      { name: 'tewerwer', expanded: true, children: [
-                              { name: '232323', children: [] },
-                              { name: 'rtyryr', children: [] }
-                          ]
-                      }
+                      // { name: 'wewewe', children: [] },
+                      // { name: 'tewerwer', expanded: true, children: [
+                      //         { name: '232323', children: [] },
+                      //         { name: 'rtyryr', children: [] }
+                      //     ]
+                      // }
                   ],
       }
     },
@@ -36,9 +36,19 @@
     },
 
     ready: function () {
-
+      var self = this;
+      $.ajax({
+        url: config.baseUrl + '/groups' ,
+        method: 'GET',
+        success: function(data){
+          self.treeData = data.data;
+        },
+        error: function(error){
+          alert(JSON.stringify(error));
+        }
+      });
     }
 
-
   }
+
 </script>

@@ -63,19 +63,31 @@ def get_connect_child_and_parent_list():
   for section_name, section_value in config.items():
 
     if section_name.endswith('children'):
-
+      section_temp = section_name[0:-9]
+      # 将自己加入关系链
+      connect_list.append( (section_temp, section_temp) )
       # children 下面还是分组
       for field_name, field_value in section_value.items():
-        connect_list.append((section_name[0:-9], field_name))
+        connect_list.append((section_temp, field_name))
 
   return list(set(connect_list))
+
+def insert_group_relation(connect_list):
+  sql = """ insert into conf_group_relation(ancestor_id, descendant_id)
+            select a.id, b.id from(
+                select id from conf_group where name = %s
+              ) a
+              join
+              ( select id from conf_group where name = %s ) b
+  """
+  util.db_executemany(pool, sql, connect_list);
 
 
 def update_child_parent_connection(connect_list):
   sql = """ update conf_group a, (select id from conf_group where name = %s) b
           set a.parent = b.id  where a.name = %s """
 
-  util.db_executemany(pool, sql, connect_list);
+  util.db_executemany(pool, sql, connect_list)
 
 
 def get_conf_file_info_list():
@@ -104,6 +116,7 @@ if __name__ == '__main__':
   # insert_group_data(group_list)
 
   # connect_list = get_connect_child_and_parent_list()
+  # insert_group_relation(connect_list)
   # update_child_parent_connection(connect_list)
 
   # conf_file_list = get_conf_file_info_list()

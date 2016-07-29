@@ -182,9 +182,61 @@ class LoadConf(Resource):
 
 
 class GroupList(Resource):
+  def build_map(self, db_list):
+    result = {}
+    for value in db_list:
+      value_a = value['a']
+      value_b = value['b']
+      value_c = value['c']
+      value_d = value['d']
+
+      if value_a and not result.get(value_a):
+        result[value_a] = {}
+
+      if value_b and not result[value_a].get(value_b):
+        result[value_a][value_b] = {}
+
+      if value_c and not result[value_a][value_b].get(value_c):
+        result[value_a][value_b][value_c] = {}
+
+      if value_d and not result[value_a][value_b][value_c].get(value_d):
+        result[value_a][value_b][value_c][value_d] = {}
+
+    return result
+
+  def recursion_map(self, deep_map):
+    children = []
+    if deep_map:
+      for key, value in deep_map.items():
+        key_split = key.split(':')
+        entity = { 'name':key_split[1], 'id': key_split[0] , 'children': [] }
+        children.append( entity )
+
+        if value:
+          entity['children'] = self.recursion_map(value)
+
+    else:
+      # 为空map
+      pass
+
+    return children
+
+
   def get(self):
-    result = util.db_fetchall(pool, "select * from conf_group order by name")
-    return {'data':result}
+    # result = util.db_fetchall(pool, "select * from conf_group order by name")
+    sql = """
+      select concat(a.id, ':', a.name) a, concat(a.id, ':', b.name) b, concat(a.id, ':', c.name) c, concat(a.id, ':', d.name) d from
+      conf_group a
+      left join conf_group b on b.parent = a.id
+      left join conf_group c on c.parent = b.id
+      left join conf_group d on c.parent = c.id
+      where a.parent is null
+      order by d.name desc, c.name desc, b.name desc, a.name desc """
+    db_list = util.db_fetchall(pool, sql)
+    result = self.build_map(db_list)
+
+    final = self.recursion_map(result)
+    return {'data':final}
 
 
 class Group(Resource):
