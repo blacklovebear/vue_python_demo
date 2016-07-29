@@ -7,8 +7,9 @@ import App from 'components/app.vue';
 import Grid from 'components/grid.vue';
 import Group from 'components/group.vue';
 
-import VueSearchSelect from 'components/searchSelect.vue';
+import selectSearch from 'components/selectSearch.vue';
 
+import treeSelect from 'components/treeSelect.vue';
 
 // use bootstrap
 import 'bootstrap-webpack';
@@ -18,7 +19,9 @@ import 'bootstrap-webpack';
 Vue.component('yunba-grid', Vue.extend(Grid));
 Vue.component('yunba-group', Vue.extend(Group));
 
-Vue.component('select-search', Vue.extend(VueSearchSelect));
+Vue.component('select-search', Vue.extend(selectSearch));
+
+Vue.component('tree-select', Vue.extend(treeSelect));
 
 // 注册表格中使用的自定义指令
 Vue.partial('listOptionPartial', "<a v-link=\"{name: 'detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
@@ -79,6 +82,12 @@ router.map({
       name: 'groupInfo',
       component: function (resolve) {
         require(['./routers/group_info.vue'], resolve);
+      }
+    },
+    '/test': {
+      name: 'test',
+      component: function (resolve) {
+        require(['./routers/test.vue'], resolve);
       }
     },
 

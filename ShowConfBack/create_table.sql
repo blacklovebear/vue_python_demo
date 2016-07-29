@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS conf_group(
   name           char(32) not null,
   comment        varchar(128),
   conf_file_path varchar(128),         -- 配置文件路径分组设置
-  unique(name)
+  parent         MEDIUMINT,
+  unique(name),
+  FOREIGN KEY (parent) REFERENCES conf_group(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS conf_file_info(
@@ -24,18 +26,12 @@ CREATE TABLE IF NOT EXISTS conf_file_info(
   FOREIGN KEY(group_id) REFERENCES conf_group(id)
 );
 
-insert into conf_group(name, conf_file_path) values('rabbitmq', '~/yunba_portal/config.js');
-insert into conf_group(name, conf_file_path) values('rabbitmq-unuse', '~/test_conf_show/test.erl');
+insert into conf_group(name, conf_file_path) values('test-group', '~/test_conf_show/test.erl');
 commit;
 
 insert into conf_file_info(host_domain, host_user_name, ssh_key_path,
                           service_name, group_id)
   values('abj-elogic-test1.yunba.io', 'yunba', '/Users/weizhiyun078/.ssh/id_rsa',
-    'yunba_portal', 1);
-
-insert into conf_file_info(host_domain, host_user_name, ssh_key_path,
-                          service_name, group_id)
-  values('abj-elogic-test1.yunba.io', 'yunba', '/Users/weizhiyun078/.ssh/id_rsa',
-    'test_erl', 2);
+    'test_erl', 1);
 
 commit;
