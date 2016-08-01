@@ -1,17 +1,17 @@
 <style scoped>
 </style>
 <template>
-    <tree-select :on-select="onSelect" class="form-control" :tree-data="treeData"></tree-select>
+    <tree-select :on-select="onSelect" class="form-control" :tree-data="treeData" :search-text="searchText"></tree-select>
 
 </template>
 <script>
   import config from 'config';
   module.exports = {
-    props: ['group'],
+    props: ['group', 'searchText'],
 
     data: function () {
       return {
-        treeData: [],
+        treeData: []
       }
     },
 
@@ -24,7 +24,7 @@
       loadGroupList: function(){
         var self = this;
         $.ajax({
-          url: config.baseUrl + '/groups',
+          url: config.baseUrl + '/group/search',
           method: 'GET',
           success: function(data){
             self.treeData = data.data;

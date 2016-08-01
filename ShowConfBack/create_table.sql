@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS conf_group(
   FOREIGN KEY (parent) REFERENCES conf_group(id) ON DELETE CASCADE
 );
 
--- 暂时没有使用 可以删除
+
 CREATE TABLE IF NOT EXISTS conf_group_relation(
   ancestor_id   MEDIUMINT NOT NULL REFERENCES conf_group(id),
   descendant_id MEDIUMINT NOT NULL REFERENCES conf_group(id),

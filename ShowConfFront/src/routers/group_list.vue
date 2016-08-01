@@ -51,8 +51,10 @@
         // 表格过滤搜索
         searchQuery: '',
 
-        gridColumns: ['name', 'conf_file_path', 'comment', 'operate'],
-        gridDisplayNames: {name: '分组名称', conf_file_path:'配置文件路径', comment: '备注信息', operate: '操作'},
+        gridColumns: ['name', 'is_leaf', 'conf_file_path', 'parent_name', 'comment', 'operate'],
+        gridDisplayNames: {name: '分组名称', conf_file_path:'配置文件路径',
+                          parent_name:"父节点名称", is_leaf: '是否为叶子分组',
+                          comment: '备注信息', operate: '操作'},
         moreOperation:{
           operate: 'groupPartial',
         },

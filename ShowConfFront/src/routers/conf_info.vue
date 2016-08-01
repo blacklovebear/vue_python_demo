@@ -73,7 +73,7 @@
         <div class="form-group row">
           <label for="group" class="col-sm-2 form-control-label">分组</label>
           <div class="col-sm-6">
-            <yunba-group :group.sync="fileInfo.group_id"></yunba-group>
+            <group-search :group.sync="fileInfo.group_id" :search-text="fileInfo.group_name"></group-search>
           </div>
         </div>
 
@@ -104,6 +104,7 @@
           conf_file_path: '',
           comment: '',
           group_id: 0,
+          group_name: ''
         },
         // 最终返回状态
         status:{},

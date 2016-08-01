@@ -11,7 +11,7 @@ mysql = {
 
 # server
 server = {
-  'host':'192.168.2.121',
+  'host':'192.168.2.116',
   'port':8888,
   'debug': True,
 }

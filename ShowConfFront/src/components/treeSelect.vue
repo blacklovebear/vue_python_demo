@@ -5,8 +5,8 @@
     <input class="search" type="text" autocomplete="off" tabindex="0" v-model="searchText" @focus="onFocus"
     />
     <div class="text"></div>
-    <div class="menu" :class="{ 'visible':showMenu }" tabindex="-1"  @blur="blurInput">
-      <div id="tree"></div>
+    <div class="menu" :class="{ 'visible':showMenu }" tabindex="-1">
+      <div id="tree" @blur="blurInput"></div>
     </div>
   </div>
 
@@ -23,17 +23,19 @@
   module.exports = {
 
     props: {
-      'treeData': {
+      treeData: {
         type: Array
       },
-      'onSelect': {
+      searchText: {
+        type: String
+      },
+      onSelect: {
         type: Function
       }
     },
     data () {
       return {
         showMenu: false,
-        searchText: '请选择一个分组',
         tree:null,
       }
     },

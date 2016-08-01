@@ -5,7 +5,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from 'components/app.vue';
 import Grid from 'components/grid.vue';
-import Group from 'components/group.vue';
+import GroupSearch from 'components/groupSearch.vue';
+import GroupSection from 'components/groupSection.vue';
 
 import selectSearch from 'components/selectSearch.vue';
 
@@ -17,7 +18,8 @@ import 'bootstrap-webpack';
 
 // register
 Vue.component('yunba-grid', Vue.extend(Grid));
-Vue.component('yunba-group', Vue.extend(Group));
+Vue.component('group-search', Vue.extend(GroupSearch));
+Vue.component('group-section', Vue.extend(GroupSection));
 
 Vue.component('select-search', Vue.extend(selectSearch));
 

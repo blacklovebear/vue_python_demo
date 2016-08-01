@@ -15,15 +15,15 @@
       </div>
       <hr>
       <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-4">
               <div class="form-inline form-group">
                   <label>文件内容搜索:</label>
                   <input v-model="keyWord" class="form-control">
                   <button class="btn btn-primary" v-on:click="searchKeyWord()">Go</button>
               </div>
           </div>
-          <div class="col-md-3">
-            <yunba-group :group.sync="group" v-on:group-change="handleGroupChange"></yunba-group>
+          <div class="col-md-4">
+            <group-search :group.sync="group" v-on:group-change="handleGroupChange" search-text="请选择一个分组"></group-search>
           </div>
 
           <div class="col-md-4">

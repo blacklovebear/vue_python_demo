@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --inline --hot --config webpack.dev.config.js --host 192.168.2.121",
+    "dev": "webpack-dev-server --inline --hot --config webpack.dev.config.js --host 192.168.2.116",
     "build": "webpack --progress --hide-modules --config webpack.prod.config.js"
   },
   "repository": {

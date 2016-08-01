@@ -31,13 +31,13 @@ pool = PooledDB(MySQLdb, 5,
 common_sql = """ select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
                     IFNULL(a.conf_file_path, b.conf_file_path) as conf_file_path,
                     a.service_name, DATE_FORMAT(a.last_ch_time, '%%Y-%%m-%%d %%H:%%i') AS last_ch_time,
-                    a.comment, a.group_id
+                    a.comment, a.group_id, b.name as group_name
                from conf_file_info a join conf_group b on a.group_id = b.id """
 
 common_sql_content = """ select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
                     IFNULL(a.conf_file_path, b.conf_file_path) as conf_file_path,
                     a.service_name, DATE_FORMAT(a.last_ch_time, '%%Y-%%m-%%d %%H:%%i') AS last_ch_time,
-                    a.comment, a.group_id, a.conf_content
+                    a.comment, a.group_id, b.name as group_name a.conf_content
                from conf_file_info a join conf_group b on a.group_id = b.id """
 
 class ConfList(Resource):
@@ -181,7 +181,16 @@ class LoadConf(Resource):
     return final
 
 
-class GroupList(Resource):
+class groupSearch(Resource):
+  """分组选择查询接口，分层级
+  """
+  def __init__(self):
+    self.parser = reqparse.RequestParser()
+    # 表示只显示 section，不显示具体的机器名
+    self.parser.add_argument('only_section', type=int, trim=True)
+    super(groupSearch, self).__init__()
+
+
   def build_map(self, db_list):
     result = {}
     for value in db_list:
@@ -219,13 +228,35 @@ class GroupList(Resource):
       # 为空map
       pass
 
+    children.sort(key=lambda x: x['name'])
     return children
 
+  def recursion_map_only_section(self, deep_map):
+    """只添加section
+    """
+    children = []
+    if deep_map:
+      for key, value in deep_map.items():
+        key_split = key.split(':')
+        entity = { 'name':key_split[1], 'id': key_split[0] , 'children': [] }
+
+        if value:
+          entity['children'] = self.recursion_map_only_section(value)
+
+          children.append( entity )
+    else:
+      # 为空map
+      pass
+
+    children.sort(key=lambda x: x['name'])
+    return children
 
   def get(self):
     # result = util.db_fetchall(pool, "select * from conf_group order by name")
+    args = self.parser.parse_args()
+
     sql = """
-      select concat(a.id, ':', a.name) a, concat(a.id, ':', b.name) b, concat(a.id, ':', c.name) c, concat(a.id, ':', d.name) d from
+      select concat(a.id, ':', a.name) a, concat(b.id, ':', b.name) b, concat(c.id, ':', c.name) c, concat(d.id, ':', d.name) d from
       conf_group a
       left join conf_group b on b.parent = a.id
       left join conf_group c on c.parent = b.id
@@ -235,8 +266,28 @@ class GroupList(Resource):
     db_list = util.db_fetchall(pool, sql)
     result = self.build_map(db_list)
 
-    final = self.recursion_map(result)
+    if args.get('only_section'):
+      final = self.recursion_map_only_section(result)
+    else:
+      final = self.recursion_map(result)
     return {'data':final}
+
+
+class groupList(Resource):
+  """分组列表，用于页面展示
+  """
+  def get(self):
+    sql = """ select distinct a.id, a.name, a.comment, a.conf_file_path, a.parent, c.name as parent_name,
+               (case when b.descendant_id > 0 then 'false' else 'true' end) as is_leaf
+                from conf_group a
+                left join conf_group_relation b
+                  on a.id = b.ancestor_id
+                 and b.ancestor_id <> b.descendant_id
+                left join conf_group c
+                  on a.parent = c.id
+               order by a.name"""
+    result = util.db_fetchall(pool, sql)
+    return {'data': result}
 
 
 class Group(Resource):
@@ -289,7 +340,9 @@ api.add_resource(Conf, '/confs/<int:id>', endpoint = 'conf')
 api.add_resource(ParseConf, '/parse/conf/<int:id>', endpoint = 'parse_conf')
 api.add_resource(LoadConf, '/load/conf/<int:id>', endpoint = 'load_conf')
 
-api.add_resource(GroupList, '/groups', endpoint = 'group_list')
+api.add_resource(groupSearch, '/group/search', endpoint = 'group_search')
+
+api.add_resource(groupList, '/groups', endpoint = 'group_list')
 api.add_resource(Group, '/groups/<int:id>', endpoint = 'group')
 
 
