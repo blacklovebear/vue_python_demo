@@ -1,8 +1,7 @@
 <style scoped>
 </style>
 <template>
-    <tree-select :on-select="onSelect" class="form-control" :tree-data="treeData" :search-text="searchText"></tree-select>
-
+    <select-search :on-select="onSelect" class="form-control" :select-options="selectOptions" :search-text="searchText"></select-search>
 </template>
 <script>
   import config from 'config';
@@ -11,7 +10,7 @@
 
     data: function () {
       return {
-        treeData: []
+        selectOptions: []
       }
     },
 
@@ -24,10 +23,10 @@
       loadSectionList: function(){
         var self = this;
         $.ajax({
-          url: config.baseUrl + '/group/search?only_section=1',
+          url: config.baseUrl + '/group/section',
           method: 'GET',
           success: function(data){
-            self.treeData = data.data;
+            self.selectOptions = data.data;
           },
           error: function(error){
             alert(JSON.stringify(error));

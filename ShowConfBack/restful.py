@@ -181,16 +181,9 @@ class LoadConf(Resource):
     return final
 
 
-class groupSearch(Resource):
+class GroupSearch(Resource):
   """分组选择查询接口，分层级
   """
-  def __init__(self):
-    self.parser = reqparse.RequestParser()
-    # 表示只显示 section，不显示具体的机器名
-    self.parser.add_argument('only_section', type=int, trim=True)
-    super(groupSearch, self).__init__()
-
-
   def build_map(self, db_list):
     result = {}
     for value in db_list:
@@ -231,30 +224,7 @@ class groupSearch(Resource):
     children.sort(key=lambda x: x['name'])
     return children
 
-  def recursion_map_only_section(self, deep_map):
-    """只添加section
-    """
-    children = []
-    if deep_map:
-      for key, value in deep_map.items():
-        key_split = key.split(':')
-        entity = { 'name':key_split[1], 'id': key_split[0] , 'children': [] }
-
-        if value:
-          entity['children'] = self.recursion_map_only_section(value)
-
-          children.append( entity )
-    else:
-      # 为空map
-      pass
-
-    children.sort(key=lambda x: x['name'])
-    return children
-
   def get(self):
-    # result = util.db_fetchall(pool, "select * from conf_group order by name")
-    args = self.parser.parse_args()
-
     sql = """
       select concat(a.id, ':', a.name) a, concat(b.id, ':', b.name) b, concat(c.id, ':', c.name) c, concat(d.id, ':', d.name) d from
       conf_group a
@@ -264,16 +234,26 @@ class groupSearch(Resource):
       where a.parent is null
       order by d.name desc, c.name desc, b.name desc, a.name desc """
     db_list = util.db_fetchall(pool, sql)
-    result = self.build_map(db_list)
 
-    if args.get('only_section'):
-      final = self.recursion_map_only_section(result)
-    else:
-      final = self.recursion_map(result)
+    result = self.build_map(db_list)
+    final = self.recursion_map(result)
     return {'data':final}
 
 
-class groupList(Resource):
+class GroupSection(Resource):
+  """对列表进行编辑的是否，选择所属父级
+  """
+  def get(self):
+    sql = """ select 0 id, '没有父分组' text
+               union all
+              select a.id, a.name text
+                from conf_group a
+                left join conf_file_info b on a.id = b.group_id where b.id is null """
+    result = util.db_fetchall(pool, sql)
+    return {'data': result}
+
+
+class GroupList(Resource):
   """分组列表，用于页面展示
   """
   def get(self):
@@ -337,6 +317,9 @@ class Group(Resource):
     args = self.parser.parse_args()
     args['id'] = id
 
+    if id == args.get('parent'):
+      return util.get_return_info(False, "分组的父级分组不能为自己")
+
     if args.get('parent'):
       sql = """update conf_group set name = %(name)s, comment = %(comment)s,
                       conf_file_path = %(conf_file_path)s, parent = %(parent)s where id = %(id)s"""
@@ -349,7 +332,10 @@ class Group(Resource):
       self._add_sql_param(sql, args)
     else:
       sql = """update conf_group set name = %(name)s, comment = %(comment)s,
-                      conf_file_path = %(conf_file_path)s where id = %(id)s"""
+                      conf_file_path = %(conf_file_path)s, parent = null where id = %(id)s"""
+      self._add_sql_param(sql, args)
+
+      sql = """delete from conf_group_relation where descendant_id = %(id)s"""
       self._add_sql_param(sql, args)
 
     util.db_trans_execute(pool, self.sql_list, self.param_list)
@@ -394,9 +380,10 @@ api.add_resource(Conf, '/confs/<int:id>', endpoint = 'conf')
 api.add_resource(ParseConf, '/parse/conf/<int:id>', endpoint = 'parse_conf')
 api.add_resource(LoadConf, '/load/conf/<int:id>', endpoint = 'load_conf')
 
-api.add_resource(groupSearch, '/group/search', endpoint = 'group_search')
+api.add_resource(GroupSearch, '/group/search', endpoint = 'group_search')
+api.add_resource(GroupSection, '/group/section', endpoint = 'group_section')
 
-api.add_resource(groupList, '/groups', endpoint = 'group_list')
+api.add_resource(GroupList, '/groups', endpoint = 'group_list')
 api.add_resource(Group, '/groups/<int:id>', endpoint = 'group')
 
 

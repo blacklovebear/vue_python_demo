@@ -28,12 +28,14 @@
       },
       'onSelect': {
         type: Function
+      },
+      'searchText': {
+        type:String
       }
     },
     data () {
       return {
         showMenu: false,
-        searchText: '',
         mousedownState: false
       }
     },
@@ -43,19 +45,19 @@
         return filter(this.selectOptions, this.searchText)
       }
     },
-    watch: {
-      'selectOptions': function (val, oldVal) {
-        var selectedItem = val.find(item => {
-          return item.selected === true
-        })
-        if (selectedItem) {
-          this.selectItem(selectedItem)
-        } else {
-          this.selectItem({})
-        }
-      },
+    // watch: {
+    //   'selectOptions': function (val, oldVal) {
+    //     var selectedItem = val.find(item => {
+    //       return item.selected === true
+    //     })
+    //     if (selectedItem) {
+    //       this.selectItem(selectedItem)
+    //     } else {
+    //       this.selectItem({})
+    //     }
+    //   },
 
-    },
+    // },
     methods: {
       resetSelect () {
         this.searchText = ''
@@ -77,10 +79,10 @@
           this.closeOptions();
           // this.enterItem();
 
-          let selectedItem = this.filteredOptions.find(item => {
-            return item.selected === true
-          })
-          this.searchText = selectedItem.text
+          // let selectedItem = this.filteredOptions.find(item => {
+          //   return item.selected === true
+          // })
+          // this.searchText = selectedItem.text
 
 
         }
