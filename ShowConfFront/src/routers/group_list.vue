@@ -1,5 +1,5 @@
 <style scoped>
-    /*@import '../styles/common.css';*/
+    @import '../styles/formInput.css';
     .row h2 {
       line-height: 0px;
     }
@@ -18,7 +18,12 @@
           <div class="col-md-4">
               <div class="form-inline form-group">
                   <label>表格内搜索:</label>
-                  <input v-model="searchQuery" class="form-control">
+
+                  <div class="inner-addon right-addon display-one-line">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input v-model="searchQuery" type="text" class="form-control" placeholder="search" />
+                  </div>
+
               </div>
           </div>
 

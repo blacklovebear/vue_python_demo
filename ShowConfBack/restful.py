@@ -28,17 +28,17 @@ pool = PooledDB(MySQLdb, 5,
                 charset = 'utf8',
                 use_unicode = True)
 
-common_sql = """ select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
+common_sql = """select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
                     IFNULL(a.conf_file_path, b.conf_file_path) as conf_file_path,
                     a.service_name, DATE_FORMAT(a.last_ch_time, '%%Y-%%m-%%d %%H:%%i') AS last_ch_time,
                     a.comment, a.group_id, b.name as group_name
                from conf_file_info a join conf_group b on a.group_id = b.id """
 
-common_sql_content = """ select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
-                    IFNULL(a.conf_file_path, b.conf_file_path) as conf_file_path,
-                    a.service_name, DATE_FORMAT(a.last_ch_time, '%%Y-%%m-%%d %%H:%%i') AS last_ch_time,
-                    a.comment, a.group_id, b.name as group_name a.conf_content
-               from conf_file_info a join conf_group b on a.group_id = b.id """
+common_sql_content = """select a.id, a.host_domain, a.host_ip, a.host_user_name, a.host_pass, a.ssh_key_path,
+                            IFNULL(a.conf_file_path, b.conf_file_path) as conf_file_path,
+                            a.service_name, DATE_FORMAT(a.last_ch_time, '%%Y-%%m-%%d %%H:%%i') AS last_ch_time,
+                            a.comment, a.group_id, b.name as group_name, a.conf_content
+                       from conf_file_info a join conf_group b on a.group_id = b.id """
 
 class ConfList(Resource):
   """配置文件列表
@@ -47,27 +47,28 @@ class ConfList(Resource):
     self.parser = reqparse.RequestParser()
     self.parser.add_argument('kw', type=str)
     self.parser.add_argument('group_id', type=int)
+
+    self.sql_list = [ common_sql + """ where 1=1 """ ]
+    self.param_list = []
     super(ConfList, self).__init__()
+
+  def _add_sql_param(self, sql, param):
+    self.sql_list.append(sql)
+    self.param_list.append(param)
 
   def get(self):
     args = self.parser.parse_args()
-    sql = common_sql + """ where 1=1 """
-
     group_id = args.get('group_id')
     kw = args.get('kw')
 
-    sql_param = []
-
     if group_id:
-      sql += ' and a.group_id = %s '
-      sql_param.append(group_id)
+      self._add_sql_param(' and a.group_id = %s ', group_id)
     if kw:
-      sql += ' and a.conf_content like %s '
-      sql_param.append( '%' + kw + '%' )
+      self._add_sql_param(' and a.conf_content like %s ', '%' + kw + '%')
 
-    sql += ' order by a.host_domain'
+    self.sql_list.append(' order by a.host_domain')
 
-    result = util.db_fetchall(pool, sql, tuple(sql_param))
+    result = util.db_fetchall(pool, ''.join(self.sql_list), tuple(self.param_list))
     return {'data':result}
 
 
@@ -102,12 +103,10 @@ class Conf(Resource):
     if not args.get('group_id'):
       return util.get_return_info(False, u'必须选择一个分组')
 
-    sql = """
-      insert into conf_file_info(host_domain, host_ip, host_user_name, ssh_key_path,
-                            host_pass, comment, last_ch_time, group_id)
-      values(%(host_domain)s, %(host_ip)s, %(host_user_name)s, %(ssh_key_path)s,
-                            %(host_pass)s, %(comment)s, now(), %(group_id)s)
-      """
+    sql = """ insert into conf_file_info(host_domain, host_ip, host_user_name, ssh_key_path,
+                                  host_pass, comment, last_ch_time, group_id)
+              values (%(host_domain)s, %(host_ip)s, %(host_user_name)s, %(ssh_key_path)s,
+                                  %(host_pass)s, %(comment)s, now(), %(group_id)s) """
     util.db_execute(pool, sql, args)
 
     final = util.get_return_info(True)
@@ -115,19 +114,15 @@ class Conf(Resource):
 
   def put(self, id):
     args = self.parser.parse_args()
+    args['id'] = id
+
     if not args.get('group_id'):
       return util.get_return_info(False, u'必须选择一个分组')
 
-    args['id'] = id
-
-    sql = """ update conf_file_info set host_domain = %(host_domain)s,
-                                        host_ip = %(host_ip)s,
-                                        host_user_name = %(host_user_name)s,
-                                        ssh_key_path = %(ssh_key_path)s,
-                                        host_pass = %(host_pass)s,
-                                        comment = %(comment)s,
-                                        last_ch_time = now(),
-                                        group_id = %(group_id)s
+    sql = """ update conf_file_info set host_domain = %(host_domain)s, host_ip = %(host_ip)s,
+                                        host_user_name = %(host_user_name)s, ssh_key_path = %(ssh_key_path)s,
+                                        host_pass = %(host_pass)s, comment = %(comment)s,
+                                        last_ch_time = now(), group_id = %(group_id)s
               where id = %(id)s """
     util.db_execute(pool, sql, args)
 
@@ -136,7 +131,6 @@ class Conf(Resource):
 
   def delete(self, id):
     util.db_execute(pool, "delete from conf_file_info where id = %s", (id, ) )
-
     final = util.get_return_info(True)
     return final
 
@@ -224,20 +218,25 @@ class GroupSearch(Resource):
     children.sort(key=lambda x: x['name'])
     return children
 
-  def get(self):
-    sql = """
-      select concat(a.id, ':', a.name) a, concat(b.id, ':', b.name) b, concat(c.id, ':', c.name) c, concat(d.id, ':', d.name) d from
-      conf_group a
-      left join conf_group b on b.parent = a.id
-      left join conf_group c on c.parent = b.id
-      left join conf_group d on c.parent = c.id
-      where a.parent is null
-      order by d.name desc, c.name desc, b.name desc, a.name desc """
-    db_list = util.db_fetchall(pool, sql)
+  def _add_all_group_item(self, final):
+    final.insert(0, {'name':'所有分组', 'id':0, 'children':[]})
+    return final
 
+  def get(self):
+    sql = """select concat(a.id, ':', a.name) a, concat(b.id, ':', b.name) b,
+                    concat(c.id, ':', c.name) c, concat(d.id, ':', d.name) d
+               from conf_group a
+               left join conf_group b on b.parent = a.id
+               left join conf_group c on c.parent = b.id
+               left join conf_group d on c.parent = c.id
+              where a.parent is null
+              order by d.name desc, c.name desc, b.name desc, a.name desc """
+
+    db_list = util.db_fetchall(pool, sql)
     result = self.build_map(db_list)
     final = self.recursion_map(result)
-    return {'data':final}
+    last_final = self._add_all_group_item(final)
+    return {'data':last_final}
 
 
 class GroupSection(Resource):

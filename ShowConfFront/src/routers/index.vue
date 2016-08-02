@@ -1,35 +1,45 @@
 <style scoped>
-    /*@import '../styles/common.css';*/
-    .row h2 {
-      line-height: 0px;
-    }
+  @import '../styles/formInput.css';
+
+  .row h2 {
+    line-height: 0px;
+  }
+
 </style>
 <template>
     <div>
       <!-- Example row of columns -->
       <div class="row" style="margin-top:15px">
-        <h2 class="sub-header col-md-5">配置文件列表</h2>
-        <span class="col-md-1 col-md-offset-6">
+        <h2 class="sub-header col-xs-5">配置文件列表</h2>
+        <span class="col-xs-1 col-xs-offset-6">
           <button class="btn btn-primary" v-on:click="add()">添加</button>
         </span>
       </div>
       <hr>
       <div class="row">
-          <div class="col-md-4">
+          <div class="col-xs-4">
               <div class="form-inline form-group">
-                  <label>文件内容搜索:</label>
-                  <input v-model="keyWord" class="form-control">
-                  <button class="btn btn-primary" v-on:click="searchKeyWord()">Go</button>
+                <label class="control-label">表格:</label>
+
+                <div class="inner-addon right-addon display-one-line">
+                  <i class="glyphicon glyphicon-search"></i>
+                  <input v-model="searchQuery" type="text" class="form-control" placeholder="search" />
+                </div>
+
               </div>
           </div>
-          <div class="col-md-4">
-            <group-search :group.sync="group" v-on:group-change="handleGroupChange" search-text="请选择一个分组"></group-search>
+          <div class="col-xs-4">
+            <group-search :group.sync="group" v-on:group-change="handleGroupChange" :search-text="groupText"></group-search>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-xs-4">
               <div class="form-inline form-group" style="text-align:right">
-                  <label>表格内搜索:</label>
-                  <input v-model="searchQuery" class="form-control">
+                <label class="control-label">文件内容:</label>
+                <div class="inner-addon right-addon display-one-line">
+                  <i class="glyphicon glyphicon-search"></i>
+                  <input v-model="keyWord" type="text" class="form-control" placeholder="search" />
+                </div>
+                <button class="btn btn-primary" v-on:click="searchKeyWord()">Go</button>
               </div>
           </div>
 
@@ -63,7 +73,8 @@
         // 表格过滤搜索
         searchQuery: '',
         keyWord:'',
-        group: 0,
+        group: localStorage.getItem('index_group') || 0,
+        groupText: localStorage.getItem('index_group_name') || '请选择一个分组',
 
         gridColumns: ['host_domain',
                       'conf_file_path', 'last_ch_time', 'id', 'operate'],
@@ -94,8 +105,10 @@
         this.loadConfFileData();
       },
 
-      handleGroupChange: function(group){
+      handleGroupChange: function(item){
         // 虽然函数有传值出来，还是使用双向绑定的值
+        localStorage.setItem('index_group', item.id);
+        localStorage.setItem('index_group_name', item.name);
         this.loadConfFileData();
       },
 

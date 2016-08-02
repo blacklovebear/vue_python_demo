@@ -18,7 +18,7 @@
     methods: {
       onSelect (item) {
         this.group = item.id;
-        this.$dispatch('group-change', this.group);
+        this.$dispatch('group-change', item);
       },
 
       loadGroupList: function(){
