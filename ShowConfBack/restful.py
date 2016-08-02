@@ -294,9 +294,19 @@ class Group(Resource):
   def __init__(self):
     self.parser = reqparse.RequestParser()
     self.parser.add_argument('name', type=str)
-    self.parser.add_argument('comment', type=str)
+    self.parser.add_argument('is_leaf', type=str)
     self.parser.add_argument('conf_file_path', type=str)
+    self.parser.add_argument('parent', type=int)
+    self.parser.add_argument('comment', type=str)
+
+    self.sql_list = []
+    self.param_list = []
+
     super(Group, self).__init__()
+
+  def _add_sql_param(self, sql, param):
+    self.sql_list.append(sql)
+    self.param_list.append(param)
 
   def get(self, id):
     pass
@@ -304,27 +314,71 @@ class Group(Resource):
   def post(self, id):
     args = self.parser.parse_args()
 
-    sql = 'insert into conf_group(name, comment, conf_file_path) values(%(name)s, %(comment)s, %(conf_file_path)s)'
-    util.db_execute(pool, sql, args)
+    if args.get('parent'):
+      sql = """insert into conf_group(name, comment, conf_file_path, parent)
+                               values(%(name)s, %(comment)s, %(conf_file_path)s, %(parent)s)"""
+      self._add_sql_param(sql, args)
 
+      sql = """ insert into conf_group_relation(ancestor_id, descendant_id)
+                select %(parent)s, id from conf_group where name = %(name)s """
+      self._add_sql_param(sql, args)
+    else:
+      sql = """insert into conf_group(name, comment, conf_file_path)
+                               values(%(name)s, %(comment)s, %(conf_file_path)s)"""
+      self._add_sql_param(sql, args)
+
+    util.db_trans_execute(pool, self.sql_list, self.param_list)
     final = util.get_return_info(True)
     return final
 
   def put(self, id):
+    """可以判断父节点是否修改，如果没修改就可以不更新
+    """
     args = self.parser.parse_args()
     args['id'] = id
 
-    sql = 'update conf_group set name = %(name)s, comment = %(comment)s, conf_file_path = %(conf_file_path)s where id = %(id)s'
-    util.db_execute(pool, sql, args)
+    if args.get('parent'):
+      sql = """update conf_group set name = %(name)s, comment = %(comment)s,
+                      conf_file_path = %(conf_file_path)s, parent = %(parent)s where id = %(id)s"""
+      self._add_sql_param(sql, args)
+
+      sql = """delete from conf_group_relation where descendant_id = %(id)s"""
+      self._add_sql_param(sql, args)
+
+      sql = """insert into conf_group_relation(ancestor_id, descendant_id) values(%(parent)s, %(id)s) """
+      self._add_sql_param(sql, args)
+    else:
+      sql = """update conf_group set name = %(name)s, comment = %(comment)s,
+                      conf_file_path = %(conf_file_path)s where id = %(id)s"""
+      self._add_sql_param(sql, args)
+
+    util.db_trans_execute(pool, self.sql_list, self.param_list)
 
     final = util.get_return_info(True)
     return final
 
   def delete(self, id):
+    args = {'id': id}
+
+    sql = """update conf_group set parent = ( select b.parent from (select * from conf_group) b where b.id =%(id)s)
+            where parent = %(id)s """
+    self._add_sql_param(sql, args)
+
+    sql = """update conf_group_relation set ancestor_id = (select b.parent from (select * from conf_group) b where b.id =%(id)s)
+             where ancestor_id = %(id)s """
+    self._add_sql_param(sql, args)
+
+    sql = """delete from conf_group_relation where descendant_id = %(id)s """
+    self._add_sql_param(sql, args)
+
+    sql = """delete from conf_group where id = %(id)s """
+    self._add_sql_param(sql, args)
+
     try:
-      util.db_execute(pool, "delete from conf_group where id = %s", (id, ) )
+      util.db_trans_execute(pool, self.sql_list, self.param_list)
     except Exception, e:
       final = util.get_return_info(False, u'删除失败，此分组作为外键被关联')
+      print e
       return final
 
     final = util.get_return_info(True)

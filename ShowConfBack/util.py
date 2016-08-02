@@ -46,6 +46,27 @@ def db_execute(pool, sql, param = ()):
   cur.close()
   conn.close()
 
+
+def db_trans_execute(pool, sql_list, param_list):
+  """带事务的方式执行多条sql
+  """
+  conn = pool.connection()
+
+  try:
+    for index, sql in enumerate(sql_list):
+      cur = conn.cursor();
+      cur.execute(sql, param_list[index])
+      cur.close()
+
+    conn.commit()
+  except Exception, e:
+    conn.rollback()
+    raise e
+
+  finally:
+    conn.close()
+
+
 def db_executemany(pool, sql, param = ()):
   """数据库执行sql
   """
