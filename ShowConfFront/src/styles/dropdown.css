@@ -119,12 +119,12 @@
     border-top: none;
     line-height: 1em;
     color: rgba(0, 0, 0, 0.87);
-    padding: 0.71428571rem 1.14285714rem !important;
-    font-size: 1rem;
+    font-size: 16px;
     text-transform: none;
     font-weight: normal;
     box-shadow: none;
     -webkit-touch-callout: none;
+    margin: 7px 10px;
   }
 
   .ui.dropdown .menu > .item:first-child {
@@ -464,7 +464,6 @@
   /* Menu Item */
   .ui.selection.dropdown .menu > .item {
     border-top: 1px solid #FAFAFA;
-    padding: 0.71428571rem 1.14285714rem !important;
     white-space: normal;
     word-wrap: normal;
   }
