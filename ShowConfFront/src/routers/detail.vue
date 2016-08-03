@@ -1,10 +1,9 @@
-<style>
-    .highlight {
-      background-color: yellow
-    }
+<style scoped>
+    @import '../styles/highlight.css';
     .conf-explain{
       margin-left: 50px;
     }
+
 </style>
 <template>
     <div>
@@ -47,6 +46,7 @@
 
   import "jquery-highlight";
   import config from 'config';
+  import "../jquery.link";
 
   module.exports = {
     data: function(){
@@ -101,6 +101,10 @@
           self.fileLoadResult = data.load_result;
 
           setTimeout(function(){
+
+            // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
+            $('#conf-detail').link('a\\w+-[\\w]+-[\\w]+', "#!/index?no_cache=1&kw=");
+
             // 如果关键字为空就没必要高亮
             var value = $('.highlight-kw').val();
             if (value) {

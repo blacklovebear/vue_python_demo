@@ -110,6 +110,11 @@ def insert_conf_list(conf_file_list):
   util.db_executemany(pool, sql, conf_file_list);
 
 
+def add_host_domain_suffix():
+  sql = """update conf_file_info set host_domain = concat(host_domain,'.yunba.io')
+            where host_domain not like '%%.yunba.io'; """
+  util.db_execute(pool, sql)
+
 if __name__ == '__main__':
   pass
   # group_list = get_conf_group()
@@ -121,6 +126,8 @@ if __name__ == '__main__':
 
   # conf_file_list = get_conf_file_info_list()
   # insert_conf_list(conf_file_list)
+
+  # add_host_domain_suffix()
 
 
 

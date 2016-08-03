@@ -1,5 +1,6 @@
 <style scoped>
     @import '/node_modules/jquery-jsonview/dist/jquery.jsonview.css';
+    @import '../styles/highlight.css';
     .conf-explain{
       margin-left: 50px;
     }
@@ -34,6 +35,8 @@
 <script>
   import "jquery-highlight";
   import "jquery-jsonview";
+
+  import "../jquery.link";
   import config from 'config';
 
   module.exports = {
@@ -52,9 +55,11 @@
         var status = $(event.toElement).attr('status');
         if (status === '0') {
           $('#json-content').highlight(value);
+          // $('#json-content').link(value);
           $(event.toElement).attr('status', '1');
         } else {
           $('#json-content').unhighlight(value);
+          // $('#json-content').unlink(value);
           $(event.toElement).attr('status', '0');
         }
       },
@@ -77,6 +82,10 @@
           $('#json-content').JSONView(data.json);
 
           setTimeout(function(){
+
+            // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
+            $('#json-content').link('a\\w+-[\\w]+-[\\w]+', "#!/index?no_cache=1&kw=");
+
             // 如果关键字为空就没必要高亮
             var value = $('.highlight-kw').val();
             if (value) {

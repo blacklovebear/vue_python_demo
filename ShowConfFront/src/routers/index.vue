@@ -23,7 +23,7 @@
 
                 <div class="inner-addon right-addon display-one-line">
                   <i class="glyphicon glyphicon-search"></i>
-                  <input v-model="searchQuery" type="text" class="form-control" placeholder="search" />
+                  <input v-model="searchQuery" type="text" class="form-control" placeholder="search" value="{{$route.query.kw}}"/>
                 </div>
 
               </div>
@@ -73,13 +73,14 @@
         // 表格过滤搜索
         searchQuery: '',
         keyWord:'',
-        group: localStorage.getItem('index_group') || 0,
-        groupText: localStorage.getItem('index_group_name') || '请选择一个分组',
+        group: 0,
+        groupText: '请选择一个分组',
 
         gridColumns: ['host_domain',
-                      'conf_file_path', 'last_ch_time', 'id', 'operate'],
+                      'conf_file_path', 'group_name', 'last_ch_time', 'id', 'operate'],
         gridDisplayNames: { host_domain: "所在服务器",
                             conf_file_path: '配置文件路径',
+                            group_name: '所属分组名',
                             last_ch_time: '最近同步时间',
                             id: '查看',
                             operate: '操作',
@@ -155,6 +156,14 @@
     },
 
     ready: function () {
+      // 表示group不采用缓存
+      if (this.$route.query.no_cache){
+        // do nothing
+      } else {
+        this.group = localStorage.getItem('index_group') || 0;
+        this.groupText = localStorage.getItem('index_group_name') || '请选择一个分组';
+      }
+
       this.loadConfFileData();
     }
 
