@@ -31,11 +31,14 @@ Vue.partial('listOptionPartial', "<a v-link=\"{name: 'detail', params: {conf_id:
 
 Vue.partial('loadConfPartial', "<a v-on:click.stop.prevent='loadFileContent(entry.id)'>重新加载</a>");
 
-Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>| \
-        <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
+Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>");
+Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>");
 
-Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>| \
-        <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
+// Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>| \
+//         <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
+
+// Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>| \
+//         <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
 
 
 Vue.use(VueRouter);

@@ -22,12 +22,6 @@
                 <li>
                     <a v-link="{name: 'groupList'}">分组列表</a>
                 </li>
-                <li>
-                    <a v-link="{name: 'confInfo'}">添加配置文件</a>
-                </li>
-                <li>
-                    <a v-link="{name: 'groupInfo'}">增加分组</a>
-                </li>
 
             </ul>
         </div>

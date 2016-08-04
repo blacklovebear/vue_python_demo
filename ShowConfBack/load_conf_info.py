@@ -115,6 +115,31 @@ def add_host_domain_suffix():
             where host_domain not like '%%.yunba.io'; """
   util.db_execute(pool, sql)
 
+
+def set_conf_file_path_for_group():
+  """将已知的一些配置文件路径添加到数据库
+  """
+  config = {
+    'elogic': '/home/yunba/elogic/rel/files/app.config',
+    'erest':  '/home/yunba/erest/rel/files/app.config',
+    'emqtt': '/home/yunba/etopicfs/files/app.config',
+    'etopicfs': '/home/yunba/etopicfs/files/app.config',
+  }
+  sql_list = []
+  param_list = []
+
+  sql ="""
+    update conf_group
+    set conf_file_path = %s
+    where name like %s and id not in( select distinct ancestor_id from conf_group_relation )  """
+
+  for key, value in config.items():
+    sql_list.append( sql )
+    param_list.append( (value, '%' + key + '%') )
+
+  util.db_trans_execute(pool, sql_list, param_list)
+
+
 if __name__ == '__main__':
   pass
   # group_list = get_conf_group()
@@ -128,6 +153,7 @@ if __name__ == '__main__':
   # insert_conf_list(conf_file_list)
 
   # add_host_domain_suffix()
+  # set_conf_file_path_for_group()
 
 
 
