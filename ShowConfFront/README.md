@@ -66,8 +66,8 @@ new ExtractTextPlugin("[name].css",{ allChunks : true,resolve : ['modules'] }),
 ##安装
 ```
 // 注意,需要提前在全局安装webpack和webpack-dev-server,如果已安装请忽略
-npm install webpack -g
-npm install webpack-dev-server -g
+sudo npm install webpack -g
+sudo npm install webpack-dev-server -g
 
 // 安装成功后,再安装依赖
 npm install

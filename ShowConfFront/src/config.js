@@ -1,3 +1,3 @@
 module.exports = {
-  baseUrl: "http://192.168.2.116:8888"
+  baseUrl: "http://127.0.0.1:8888"
 }
