@@ -1,3 +1,14 @@
+-- 新建yunba用户
+CREATE USER 'yunba'@'localhost' IDENTIFIED BY 'yunba321';
+
+GRANT ALL PRIVILEGES ON * . * TO 'yunba'@'localhost';
+
+FLUSH PRIVILEGES;
+
+
+-- 新建数据库
+create database conf_show;
+
 use conf_show;
 
 CREATE TABLE IF NOT EXISTS conf_group(
@@ -33,7 +44,7 @@ CREATE TABLE IF NOT EXISTS conf_file_info(
   FOREIGN KEY(group_id) REFERENCES conf_group(id)
 );
 
-insert into conf_group(name, conf_file_path) values('test-group', '~/test_conf_show/test.erl');
+insert into conf_group(name, conf_file_path) values('aaa-test', '~/test_conf_show/test.erl');
 commit;
 
 insert into conf_file_info(host_domain, host_user_name, ssh_key_path,

@@ -65,6 +65,17 @@ new ExtractTextPlugin("[name].css",{ allChunks : true,resolve : ['modules'] }),
 
 ##安装
 ```
+// node的版本最后是6.3.0
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.3/install.sh | bash
+nvm list
+nvm ls-remote
+nvm install 6.3.0
+nvm use 6.3.0
+nvm alias default 6.3.0
+node -v
+npm install -g npm
+npm -v
+
 // 注意,需要提前在全局安装webpack和webpack-dev-server,如果已安装请忽略
 sudo npm install webpack -g
 sudo npm install webpack-dev-server -g
