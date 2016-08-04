@@ -1,5 +1,4 @@
 # encoding:utf-8
-import oursql
 import MySQLdb
 import paramiko
 
