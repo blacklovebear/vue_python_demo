@@ -6,7 +6,6 @@ from  DBUtils.PooledDB import PooledDB
 import erl_terms
 import util
 import config
-import group
 
 import sys
 reload(sys)  # Reload does the trick!

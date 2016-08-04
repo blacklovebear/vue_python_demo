@@ -16,6 +16,7 @@
 ##安装
 ```
 sudo apt-get install python-dev libffi-dev mysql-server
+sudo apt-get install libmysqlclient-dev
 sudo pip install -r requirements.txt
 ```
 

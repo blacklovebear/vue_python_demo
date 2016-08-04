@@ -65,6 +65,9 @@ new ExtractTextPlugin("[name].css",{ allChunks : true,resolve : ['modules'] }),
 
 ##安装
 ```
+// 先卸载机器上安装的 nodejs
+sudo apt-get purge nodejs && sudo apt-get autoremove && sudo apt-get autoclean
+
 // node的版本最后是6.3.0
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.3/install.sh | bash
 nvm list
