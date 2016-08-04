@@ -140,6 +140,10 @@ def set_conf_file_path_for_group():
   util.db_trans_execute(pool, sql_list, param_list)
 
 
+def update_conf_file_host_user_name():
+  sql = """ update conf_file_info set host_user_name ='yunba' where host_user_name is null """
+  util.db_execute(pool, sql)
+
 if __name__ == '__main__':
   pass
   # group_list = get_conf_group()
@@ -154,6 +158,7 @@ if __name__ == '__main__':
 
   # add_host_domain_suffix()
   # set_conf_file_path_for_group()
+  # update_conf_file_host_user_name()
 
 
 
