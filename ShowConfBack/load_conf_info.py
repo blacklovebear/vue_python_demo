@@ -64,7 +64,7 @@ def get_connect_child_and_parent_list():
     if section_name.endswith('children'):
       section_temp = section_name[0:-9]
       # 将自己加入关系链
-      connect_list.append( (section_temp, section_temp) )
+      # connect_list.append( (section_temp, section_temp) )
       # children 下面还是分组
       for field_name, field_value in section_value.items():
         connect_list.append((section_temp, field_name))
