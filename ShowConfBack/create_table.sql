@@ -44,12 +44,10 @@ CREATE TABLE IF NOT EXISTS conf_file_info(
   FOREIGN KEY(group_id) REFERENCES conf_group(id)
 );
 
-insert into conf_group(name) values('aaa-test');
+insert into conf_group(name, conf_file_path) values('aaa-test', '~/test_conf_show/test.erl');
 commit;
 
-insert into conf_file_info(host_domain, host_user_name, ssh_key_path,
-                          service_name, group_id)
-  values('abj-elogic-test1.yunba.io', 'yunba', '/Users/weizhiyun078/.ssh/id_rsa',
-    'test_erl', 1);
+insert into conf_file_info(host_domain, host_user_name, service_name, group_id)
+     values('abj-elogic-test1.yunba.io', 'yunba', 'test_erl', 1);
 
 commit;
