@@ -3,6 +3,7 @@
 
 git+https://github.com/machinezone/python_etf.git#egg=erl_terms
 
+setuptools>=24.0.2
 cryptography==1.4
 Werkzeug==0.11.10
 paramiko==2.0.1
