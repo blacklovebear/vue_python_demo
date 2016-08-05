@@ -1,4 +1,5 @@
 # encoding:utf-8
+import re
 
 import MySQLdb
 from  DBUtils.PooledDB import PooledDB
@@ -25,7 +26,26 @@ pool = PooledDB(MySQLdb, 5,
                 use_unicode = True)
 
 config = configparser.ConfigParser()
-config.read('full.ini')
+
+
+def trans_origin_text_to_ini(input_file_name, output_file_name):
+  pattern = re.compile(r"^\S+")
+  input_file = open(input_file_name, 'r')
+  output_file = open(output_file_name, 'w')
+
+  for i, line in enumerate(input_file):
+      four_letter_words = pattern.findall(line)
+      for word in four_letter_words:
+          if word.startswith('['):
+            output_file.write('%s\n' % word)
+          else:
+            output_file.write('%s\n' % (word + '=0'))
+
+  input_file.close()
+  output_file.close()
+
+def config_read_file(file_name):
+  config.read(file_name)
 
 
 def parse_from_ini_file():
@@ -150,22 +170,24 @@ def update_conf_file_ssh_key():
 
 
 if __name__ == '__main__':
-  pass
-  # group_list = get_conf_group()
-  # insert_group_data(group_list)
+  trans_origin_text_to_ini('origin.txt', 'final.ini')
+  config_read_file('final.ini')
 
-  # connect_list = get_connect_child_and_parent_list()
-  # insert_group_relation(connect_list)
-  # update_child_parent_connection(connect_list)
+  group_list = get_conf_group()
+  insert_group_data(group_list)
 
-  # conf_file_list = get_conf_file_info_list()
-  # insert_conf_list(conf_file_list)
+  connect_list = get_connect_child_and_parent_list()
+  insert_group_relation(connect_list)
+  update_child_parent_connection(connect_list)
 
-  # add_host_domain_suffix()
-  # set_conf_file_path_for_group()
-  # update_conf_file_host_user_name()
+  conf_file_list = get_conf_file_info_list()
+  insert_conf_list(conf_file_list)
 
-  # update_conf_file_ssh_key()
+  add_host_domain_suffix()
+  set_conf_file_path_for_group()
+  update_conf_file_host_user_name()
+
+  update_conf_file_ssh_key()
 
 
 
