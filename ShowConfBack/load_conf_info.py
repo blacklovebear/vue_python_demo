@@ -150,7 +150,8 @@ def set_conf_file_path_for_group():
   sql ="""
     update conf_group
     set conf_file_path = %s
-    where name like %s and id not in( select distinct ancestor_id from conf_group_relation )  """
+    where parent in (select id from conf_group where name like %s)
+    and id not in( select distinct ancestor_id from conf_group_relation )  """
 
   for key, value in config.items():
     sql_list.append( sql )
