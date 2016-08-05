@@ -95,6 +95,9 @@ def ssh_get_file_content(conf_info_dict):
     error_info = str(e)
     return error_info, ''
 
+  if not conf_info_dict.get('conf_file_path'):
+    return u'配置文件路径不能为空.', ''
+
   stdin, stdout, stderr = ssh.exec_command("cat " + conf_info_dict.get('conf_file_path'))
   file_content =  stdout.readlines()
   error_info = stderr.readlines()

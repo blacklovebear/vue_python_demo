@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS conf_file_info(
   FOREIGN KEY(group_id) REFERENCES conf_group(id)
 );
 
-insert into conf_group(name, conf_file_path) values('aaa-test', '~/test_conf_show/test.erl');
+insert into conf_group(name) values('aaa-test');
 commit;
 
 insert into conf_file_info(host_domain, host_user_name, ssh_key_path,
