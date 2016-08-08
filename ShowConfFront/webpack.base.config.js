@@ -78,7 +78,9 @@ module.exports = {
           _: 'lodash',
         }),
 
+        // 独立打包css文件以外链形式加载
         new ExtractTextPlugin("[name].css",{ allChunks : true,resolve : ['modules'] }),
+        // 公共模块独立打包配置
         new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     ]
 };
