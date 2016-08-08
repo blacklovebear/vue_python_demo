@@ -1,14 +1,13 @@
 <style scoped>
-    /*@import '../styles/common.css';*/
-    .form-control-label {
-      text-align: right;
-    }
-    .text-muted {
-      color:#d9534f;
-    }
-    .row h2 {
-      line-height: 0px;
-    }
+  .form-control-label {
+    text-align: right;
+  }
+  .text-muted {
+    color:#d9534f;
+  }
+  .row h2 {
+    line-height: 0px;
+  }
 </style>
 <template>
     <div>
@@ -57,7 +56,6 @@
           </div>
         </div>
 
-
         <div class="form-group row">
           <label for="comment" class="col-sm-2 form-control-label">所选父节点</label>
           <div class="col-sm-6">
@@ -65,8 +63,6 @@
               v-on:section-change="handleSectionChange"></group-section>
           </div>
         </div>
-
-
 
         <div class="form-group row">
           <div class="col-sm-offset-2 col-sm-6">
@@ -76,13 +72,18 @@
       </form>
 
     </div>
-
-
 </template>
+
 <script>
   import config from 'config';
-  module.exports = {
-    data: function(){
+  import GroupSection from '../components/groupSection';
+
+  export default {
+    components: {
+      'group-section': GroupSection
+    },
+
+    data() {
       return {
         groupInfo:{
           id: 0,
@@ -97,15 +98,15 @@
     },
 
     methods: {
-      back: function(){
+      back() {
         this.$router.go({name: 'groupList'});
       },
 
-      handleSectionChange (info){
+      handleSectionChange(info) {
         console.log(info);
       },
 
-      onSubmit: function(){
+      onSubmit() {
         var self = this;
 
         var groupId = self.groupInfo.id;
@@ -116,30 +117,27 @@
           url: config.baseUrl + '/groups/' + groupId ,
           method: method,
           data: self.groupInfo,
-          success: function(data){
+          success(data) {
             if (data.code < 0){
               alert(data.message);
             } else {
               self.$router.go({ name: 'groupList'});
             }
-
           },
-          error: function(error){
+
+          error(error) {
             alert(JSON.stringify(error));
           }
         });
-
-
       }
     },
 
-    ready: function () {
+    ready() {
       // 表示修改，会传当前记录的信息过来
       if (this.$route.query){
         _.merge(this.groupInfo, this.$route.query);
       }
     }
-
 
   }
 </script>

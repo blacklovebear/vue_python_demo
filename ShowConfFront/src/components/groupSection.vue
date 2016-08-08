@@ -5,38 +5,43 @@
 </template>
 <script>
   import config from 'config';
-  module.exports = {
+  import SelectSearch from './selectSearch';
+
+  export default {
+    components: {
+      'select-search': SelectSearch,
+    },
+
     props: ['parentSection', 'searchText'],
 
-    data: function () {
+    data() {
       return {
         selectOptions: []
       }
     },
 
     methods: {
-      onSelect (item) {
+      onSelect(item) {
         this.parentSection = item.id;
         this.$dispatch('section-change', this.parentSection);
       },
 
-      loadSectionList: function(){
+      loadSectionList() {
         var self = this;
         $.ajax({
           url: config.baseUrl + '/group/section',
           method: 'GET',
-          success: function(data){
+          success(data) {
             self.selectOptions = data.data;
           },
-          error: function(error){
+          error(error) {
             alert(JSON.stringify(error));
           }
         });
       },
-
     },
 
-    ready: function(){
+    ready() {
       this.loadSectionList();
     }
   }

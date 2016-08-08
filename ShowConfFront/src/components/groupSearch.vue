@@ -2,14 +2,19 @@
 </style>
 <template>
     <tree-select :on-select="onSelect" class="form-control" :tree-data="treeData" :search-text="searchText"></tree-select>
-
 </template>
 <script>
   import config from 'config';
-  module.exports = {
+  import TreeSelect from './treeSelect';
+
+  export default {
+    components: {
+      'tree-select': TreeSelect,
+    },
+
     props: ['group', 'searchText'],
 
-    data: function () {
+    data() {
       return {
         treeData: []
       }
@@ -21,15 +26,15 @@
         this.$dispatch('group-change', item);
       },
 
-      loadGroupList: function(){
+      loadGroupList() {
         var self = this;
         $.ajax({
           url: config.baseUrl + '/group/search',
           method: 'GET',
-          success: function(data){
+          success(data) {
             self.treeData = data.data;
           },
-          error: function(error){
+          error(error) {
             alert(JSON.stringify(error));
           }
         });
@@ -37,7 +42,7 @@
 
     },
 
-    ready: function(){
+    ready() {
       this.loadGroupList();
     }
   }

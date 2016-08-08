@@ -1,3 +1,8 @@
+<style scoped>
+  @import "/node_modules/js-treeview/dist/treeview.min.css";
+  @import '../styles/treeView.css';
+  @import '../styles/dropdown.css';
+</style>
 
 <template>
   <div class="ui search dropdown selection" :class="{ 'active':showMenu }">
@@ -9,19 +14,14 @@
       <div id="tree" @blur="blurInput"></div>
     </div>
   </div>
-
-
-  <!-- <button id="expandAll" v-on:click.stop.prevent="expandAll()">Expand All</button> -->
-  <!-- <button id="collapseAll" v-on:click.stop.prevent="collapseAll()">Collapse All</button> -->
-
 </template>
+
 <script>
   import config from 'config';
   import TreeView from 'js-treeview';
   import Vue from 'vue';
 
-  module.exports = {
-
+  export default {
     props: {
       treeData: {
         type: Array
@@ -33,6 +33,7 @@
         type: Function
       }
     },
+
     data () {
       return {
         showMenu: false,
@@ -40,15 +41,15 @@
       }
     },
 
-    computed:{
-      filterData:function(){
+    computed: {
+      filterData() {
         const filter = Vue.filter('filterBy');
         return filter(this.treeData, this.searchText);
       },
     },
 
-    watch:{
-      filterData: function(value, oldValue){
+    watch: {
+      filterData(value, oldValue) {
         this.buildTree(value);
       }
     },
@@ -80,7 +81,7 @@
         var self = this;
         self.tree = new TreeView(valueData, 'tree');
 
-        self.tree.on('select', function (e) {
+        self.tree.on('select', (e) => {
             self.searchText = e.data.name;
             self.closeOptions();
             // 回传
@@ -90,18 +91,8 @@
 
     },
 
-    ready: function(){
+    ready() {
       this.buildTree(this.filterData);
-
     }
   }
 </script>
-<style scoped>
-  @import "/node_modules/js-treeview/dist/treeview.min.css";
-
-  @import '../styles/treeView.css';
-
-  @import '../styles/dropdown.css';
-
-
-</style>

@@ -1,55 +1,50 @@
 <style scoped>
-    @import '../styles/highlight.css';
-    .conf-explain{
-      margin-left: 50px;
-    }
-
+  @import '../styles/highlight.css';
+  .conf-explain{
+    margin-left: 50px;
+  }
 </style>
 <template>
-    <div>
-      <!-- Example row of columns -->
-      <h2 class="sub-header" style="display:inline-block">配置文件详情</h2>
-      <span class="conf-explain">
-        主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}}
-      </span>
+  <div>
+    <h2 class="sub-header" style="display:inline-block">配置文件详情</h2>
+    <span class="conf-explain">
+      主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}}
+    </span>
 
-      <div class="row">
-
-        <div class="col-md-4">
-          <div class="input-group">
-            <input type="text" class="form-control highlight-kw" placeholder="高亮关键字" value="{{$route.query.kw}}">
-            <span class="input-group-btn">
-              <button class="btn btn-default" id="highlight-toggle" type="button" status="0"
-                      v-on:click.stop.prevent="toggle_highlight($event)">高亮/取消</button>
-            </span>
-          </div><!-- /input-group -->
-
-        </div><!-- /.col-md-6 -->
-        <div class="col-md-2 col-md-offset-5">
-            <button class="btn btn-primary" type="button"
-                      v-on:click.stop.prevent="loadFileContent($route.params.conf_id)">重新加载配置文件</button>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="input-group">
+          <input type="text" class="form-control highlight-kw" placeholder="高亮关键字" value="{{$route.query.kw}}">
+          <span class="input-group-btn">
+            <button class="btn btn-default" id="highlight-toggle" type="button" status="0"
+                    v-on:click.stop.prevent="toggle_highlight($event)">高亮/取消</button>
+          </span>
         </div>
-
-        <div class="col-md-1">
-            <button class="btn btn-primary" type="button"
-                      v-on:click.stop.prevent="back()">返回</button>
-        </div>
-
       </div>
 
-      <hr>
-      <div>{{fileLoadResult.message}}</div>
-      <pre id="conf-detail" conf-id="{{$route.params.conf_id}}">{{confInfo.conf_content}}</pre>
-    </div>
-</template>
-<script>
+      <div class="col-md-2 col-md-offset-5">
+        <button class="btn btn-primary" type="button"
+                v-on:click.stop.prevent="loadFileContent($route.params.conf_id)">重新加载配置文件</button>
+      </div>
 
+      <div class="col-md-1">
+        <button class="btn btn-primary" type="button" v-on:click.stop.prevent="back()">返回</button>
+      </div>
+    </div>
+
+    <hr>
+    <div>{{fileLoadResult.message}}</div>
+    <pre id="conf-detail" conf-id="{{$route.params.conf_id}}">{{confInfo.conf_content}}</pre>
+  </div>
+</template>
+
+<script>
   import "jquery-highlight";
   import config from 'config';
   import "../jquery.link";
 
-  module.exports = {
-    data: function(){
+  export default {
+    data() {
       return {
         confInfo: {},
         fileLoadResult:{},
@@ -57,11 +52,11 @@
     },
 
     methods: {
-      back: function(){
+      back() {
         this.$router.go({name: 'index'});
       },
 
-      toggle_highlight: function(event){
+      toggle_highlight(event) {
         var value = $('.highlight-kw').val();
         var status = $(event.toElement).attr('status');
         if (status === '0') {
@@ -74,7 +69,7 @@
       },
 
       // 将文件内容从机器上加载到数据库
-      loadFileContent: function(conf_id){
+      loadFileContent(conf_id) {
         $.ajax({
           url: config.baseUrl + '/load/conf/' + conf_id ,
           method: 'GET',
@@ -87,21 +82,19 @@
           }
         });
       }
-
     },
 
-    ready: function () {
+    ready() {
       var self = this;
       var conf_id = $('#conf-detail').attr('conf-id');
       $.ajax({
         url: config.baseUrl + '/confs/' + conf_id ,
         method: 'GET',
-        success: function(data){
+        success(data) {
           self.confInfo = data.data;
           self.fileLoadResult = data.load_result;
 
           setTimeout(function(){
-
             // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
             $('#conf-detail').link('a\\w+-[\\w]+-[\\w]+', "#!/index?no_cache=1&kw=");
 
@@ -113,12 +106,11 @@
           }, 500)
 
         },
-        error: function(error){
+        error(error) {
           alert(JSON.stringify(error));
         }
       });
     }
-
 
   }
 </script>

@@ -1,12 +1,8 @@
 @import 'reset.css';
 
-
-
 body {
   overflow-x: hidden;
 }
-
-/* Toggle Styles */
 
 #wrapper {
     padding-left: 0;

@@ -1,13 +1,17 @@
 <!-- css copy from https://github.com/Semantic-Org/UI-Dropdown/blob/master/dropdown.css -->
 <!-- copy from https://www.npmjs.com/package/vue-search-select -->
+<style scoped>
+  @import '../styles/dropdown.css';
+</style>
 <template>
   <div class="ui search dropdown selection" :class="{ 'active':showMenu }">
     <i class="dropdown icon" @click="onFocus"></i>
-    <input class="search" type="text" autocomplete="off" tabindex="0" v-model="searchText" @focus="onFocus" @blur="blurInput"
-           @keydown.up="prevItem"
-           @keydown.down="nextItem"
-           @keyup.enter="enterItem"
-    />
+    <input class="search" type="text" autocomplete="off" tabindex="0" v-model="searchText"
+          @focus="onFocus"
+          @blur="blurInput"
+          @keydown.up="prevItem"
+          @keydown.down="nextItem"
+          @keyup.enter="enterItem"/>
     <div class="text"></div>
     <div class="menu" :class="{ 'visible':showMenu }" tabindex="-1">
       <template v-for="(idx, option) in selectOptions | filterBy searchText">
@@ -21,6 +25,7 @@
 
 <script>
   import Vue from 'vue'
+
   export default {
     props: {
       'selectOptions': {
@@ -33,31 +38,21 @@
         type:String
       }
     },
+
     data () {
       return {
         showMenu: false,
         mousedownState: false
       }
     },
+
     computed: {
       filteredOptions () {
         const filter = Vue.filter('filterBy')
         return filter(this.selectOptions, this.searchText)
       }
     },
-    // watch: {
-    //   'selectOptions': function (val, oldVal) {
-    //     var selectedItem = val.find(item => {
-    //       return item.selected === true
-    //     })
-    //     if (selectedItem) {
-    //       this.selectItem(selectedItem)
-    //     } else {
-    //       this.selectItem({})
-    //     }
-    //   },
 
-    // },
     methods: {
       resetSelect () {
         this.searchText = ''
@@ -72,21 +67,13 @@
         this.openOptions();
         this.resetSelect();
       },
-
       // blurされた時
       blurInput () {
         if (!this.mousedownState) {
           this.closeOptions();
-          // this.enterItem();
-
-          // let selectedItem = this.filteredOptions.find(item => {
-          //   return item.selected === true
-          // })
-          // this.searchText = selectedItem.text
-
-
         }
       },
+
       closeOptions () {
         this.showMenu = false
       },
@@ -118,6 +105,7 @@
           this.filteredOptions[selectedItemIndex + 1].selected = true
         }
       },
+
       enterItem () {
         // selected = trueのitemをセット
         let selectedItem = this.filteredOptions.find(item => {
@@ -125,6 +113,7 @@
         })
         this.selectItem(selectedItem)
       },
+
       mousedownItem () {
         this.mousedownState = true
       },
@@ -146,8 +135,3 @@
     }
   }
 </script>
-
-<style scoped>
-  @import '../styles/dropdown.css';
-</style>
-

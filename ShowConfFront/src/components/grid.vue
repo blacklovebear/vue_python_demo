@@ -11,7 +11,6 @@
       filter: alpha(opacity=100); /* IE8 and earlier */
   }
 
-
   /*表格头部样式*/
   th.active .arrow {
     opacity: 1;
@@ -44,7 +43,6 @@
   }
 </style>
 <template>
-
     <table class="vuetable table table-bordered table-striped table-hover">
       <thead>
         <tr>
@@ -96,12 +94,24 @@
     </nav>
 
 </template>
+
 <script>
   import config from 'config';
   import Vue from 'vue';
 
-  module.exports = {
+  export default {
+    // 表格的一些特殊操作
+    partials: {
+      'listInfoPartial': "<a v-link=\"{name: 'detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
+              <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">Json</a>",
+
+      'listOperatePartial': "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>",
+
+      'groupOperatePartial': "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>"
+    },
+
     replace: true,
+
     props: {
       gridData: Array,
       columns: Array,
@@ -111,7 +121,8 @@
       // 文件内容搜索关键字，只为给详情链接使用
       keyWord:String
     },
-    data: function () {
+
+    data() {
       var sortOrders = {}
       this.columns.forEach(function (key) {
         sortOrders[key] = 1
@@ -127,18 +138,17 @@
     },
 
     computed: {
-      filteredData () {
+      filteredData() {
         const filter = Vue.filter('filterBy')
         return filter(this.gridData, this.filterKey)
       },
 
-      pageData () {
+      pageData() {
         var start = (this.currentPage - 1) * this.perPage;
         var end = this.currentPage * this.perPage;
         var realEnd = end > this.filteredData.length ? this.filteredData.length : end;
 
         return _.slice(this.filteredData, start, realEnd);
-
       },
       // 总页数
       total() {
@@ -150,28 +160,28 @@
     },
 
     methods: {
-      sortBy: function (key) {
+      sortBy(key) {
         this.sortKey = key
         this.sortOrders[key] = this.sortOrders[key] * -1
       },
 
-      // 将文件内容从机器上加载到数据库
-      deleteRow: function(id){
+      // 删除一行数据
+      deleteRow(id) {
         this.$dispatch('delete-row', id);
       },
 
-      nextPage: function(){
+      nextPage() {
         var current = this.currentPage;
         var total = this.total;
         this.currentPage =  current + 1 > total ? total : current + 1;
       },
 
-      gotoPage: function(page){
+      gotoPage(page) {
         var total = this.total;
         this.currentPage =  page > total || page < 1 ? 1 : page;
       },
 
-      prePage: function(){
+      prePage() {
         var current = this.currentPage;
         var total = this.total;
         this.currentPage =  current - 1 < 1 ? 1 : current - 1;

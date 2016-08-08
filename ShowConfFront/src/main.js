@@ -4,47 +4,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from 'components/app.vue';
-import Grid from 'components/grid.vue';
-import GroupSearch from 'components/groupSearch.vue';
-import GroupSection from 'components/groupSection.vue';
-
-import selectSearch from 'components/selectSearch.vue';
-
-import treeSelect from 'components/treeSelect.vue';
 
 // use bootstrap
 import 'bootstrap-webpack';
 
 
-// register
-Vue.component('yunba-grid', Vue.extend(Grid));
-Vue.component('group-search', Vue.extend(GroupSearch));
-Vue.component('group-section', Vue.extend(GroupSection));
-
-Vue.component('select-search', Vue.extend(selectSearch));
-
-Vue.component('tree-select', Vue.extend(treeSelect));
-
-// 注册表格中使用的自定义指令
-Vue.partial('listOptionPartial', "<a v-link=\"{name: 'detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
-              <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">Json</a>");
-
-Vue.partial('loadConfPartial', "<a v-on:click.stop.prevent='loadFileContent(entry.id)'>重新加载</a>");
-
-Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>");
-Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>");
-
-// Vue.partial('operatePartial', "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>| \
-//         <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
-
-// Vue.partial('groupPartial', "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>| \
-//         <a v-on:click.stop.prevent='deleteRow(entry.id)'>删除</a>");
-
-
 Vue.use(VueRouter);
 
 // 开启debug模式
-Vue.config.debug = true;
+// Vue.config.debug = true;
 
 // 路由配置
 var router = new VueRouter({
@@ -53,60 +21,42 @@ var router = new VueRouter({
 });
 
 router.map({
-    '/index': {
+    '/': {
       name: 'index',
-      component: function (resolve) {
-        require(['./routers/index.vue'], resolve);
-      }
+      component: require('./routers/conf_list.vue'),
     },
     '/detail/:conf_id/': {
       name: 'detail',
-      component: function (resolve) {
-        require(['./routers/detail.vue'], resolve);
-      }
+      component: require('./routers/detail.vue'),
     },
     '/jsonview/:conf_id': {
       name: 'jsonview',
-      component: function (resolve) {
-        require(['./routers/json_view.vue'], resolve);
-      }
+      component: require('./routers/json_view.vue'),
     },
     '/conf/info': {
       name: 'confInfo',
-      component: function (resolve) {
-        require(['./routers/conf_info.vue'], resolve);
-      }
+      component: require('./routers/conf_info.vue'),
     },
     '/group/list': {
       name: 'groupList',
-      component: function (resolve) {
-        require(['./routers/group_list.vue'], resolve);
-      }
+      component: require('./routers/group_list.vue'),
     },
     '/group/info': {
       name: 'groupInfo',
-      component: function (resolve) {
-        require(['./routers/group_info.vue'], resolve);
-      }
+      component: require('./routers/group_info.vue'),
     },
-    '/test': {
-      name: 'test',
-      component: function (resolve) {
-        require(['./routers/test.vue'], resolve);
-      }
-    },
-
 });
 
-router.beforeEach(function () {
+router.beforeEach(() => {
     window.scrollTo(0, 0);
 });
 
-router.afterEach(function (transition) {
+router.afterEach((transition) => {
 
 });
 
 router.redirect({
-    '*': "/index"
+    '*': "/"
 });
+
 router.start(App, '#app');
