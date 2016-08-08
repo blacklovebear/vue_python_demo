@@ -26,8 +26,8 @@ router.map({
       component: require('./routers/conf_list.vue'),
     },
     '/detail/:conf_id/': {
-      name: 'detail',
-      component: require('./routers/detail.vue'),
+      name: 'conf_detail',
+      component: require('./routers/conf_detail.vue'),
     },
     '/jsonview/:conf_id': {
       name: 'jsonview',

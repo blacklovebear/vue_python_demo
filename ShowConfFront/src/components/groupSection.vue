@@ -27,7 +27,7 @@
       },
 
       loadSectionList() {
-        var self = this;
+        let self = this;
         $.ajax({
           url: config.baseUrl + '/group/section',
           method: 'GET',

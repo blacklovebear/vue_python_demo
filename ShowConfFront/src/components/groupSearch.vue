@@ -27,7 +27,7 @@
       },
 
       loadGroupList() {
-        var self = this;
+        let self = this;
         $.ajax({
           url: config.baseUrl + '/group/search',
           method: 'GET',

@@ -116,8 +116,8 @@
       },
 
       handleDeleteRow(confId) {
-        var self = this;
-        var conclusion = confirm('确定删除?');
+        let self = this;
+        let conclusion = confirm('确定删除?');
         if (!conclusion) {
           return
         }
@@ -139,8 +139,8 @@
 
       // 加载表格数据
       loadConfFileData() {
-        var self = this;
-        var url = config.baseUrl + '/confs';
+        let self = this;
+        let url = config.baseUrl + '/confs';
 
         $.ajax({
           url: url,
@@ -154,7 +154,6 @@
           }
         });
       }
-
     },
 
     ready() {

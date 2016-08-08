@@ -122,12 +122,9 @@
       },
 
       onSubmit() {
-        var self = this;
-        var confId = self.fileInfo.id;
-        var method = 'POST';
-        if (confId > 0) {
-          method = "PUT"
-        }
+        let self = this;
+        let confId = self.fileInfo.id;
+        let method =  confId > 0 ? 'PUT' : 'POST';
 
         $.ajax({
           url: config.baseUrl + '/confs/' + confId ,

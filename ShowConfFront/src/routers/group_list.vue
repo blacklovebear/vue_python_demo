@@ -61,9 +61,10 @@
 
         gridColumns: ['name', 'is_leaf', 'conf_file_path', 'parent_name', 'comment', 'operate'],
         gridDisplayNames: {name: '分组名称', conf_file_path:'配置文件路径',
-                          parent_name:"父节点名称", is_leaf: '是否为叶子分组',
-                          comment: '备注信息', operate: '操作'},
-        moreOperation:{
+                           parent_name:"父节点名称", is_leaf: '是否为叶子分组',
+                           comment: '备注信息', operate: '操作'
+                          },
+        moreOperation: {
           operate: 'groupOperatePartial',
         },
         // 表格数据
@@ -78,8 +79,8 @@
       },
 
       handleDeleteRow(groupId) {
-        var self = this;
-        var conclusion = confirm('确定删除?');
+        let self = this;
+        let conclusion = confirm('确定删除?');
         if (!conclusion) {
           return
         }
@@ -88,7 +89,8 @@
           url: config.baseUrl + '/groups/' + groupId ,
           method: 'DELETE',
           success(data) {
-            if (data.code < 0) alert(data.message);
+            if (data.code < 0)
+              alert(data.message);
 
             self.loadConfFileData();
           },
@@ -96,13 +98,12 @@
             alert(JSON.stringify(error));
           }
         });
-
       },
 
       // 加载表格数据
       loadConfFileData() {
-        var self = this;
-        var url = config.baseUrl + '/groups';
+        let self = this;
+        let url = config.baseUrl + '/groups';
 
         $.ajax({
           url: url,
@@ -121,6 +122,5 @@
     ready() {
       this.loadConfFileData();
     }
-
   }
 </script>

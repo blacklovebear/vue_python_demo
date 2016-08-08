@@ -59,8 +59,8 @@
         <div class="form-group row">
           <label for="comment" class="col-sm-2 form-control-label">所选父节点</label>
           <div class="col-sm-6">
-              <group-section :parent-section.sync="groupInfo.parent" :search-text="groupInfo.parent_name"
-              v-on:section-change="handleSectionChange"></group-section>
+              <group-section :parent-section.sync="groupInfo.parent"
+              :search-text="groupInfo.parent_name"></group-section>
           </div>
         </div>
 
@@ -102,29 +102,22 @@
         this.$router.go({name: 'groupList'});
       },
 
-      handleSectionChange(info) {
-        console.log(info);
-      },
-
       onSubmit() {
-        var self = this;
-
-        var groupId = self.groupInfo.id;
-        var method = 'POST';
-        if (groupId > 0) method = "PUT";
+        let self = this;
+        let groupId = self.groupInfo.id;
+        let method = groupId > 0 ? 'PUT' : 'POST';
 
         $.ajax({
-          url: config.baseUrl + '/groups/' + groupId ,
+          url: config.baseUrl + '/groups/' + groupId,
           method: method,
           data: self.groupInfo,
           success(data) {
             if (data.code < 0){
               alert(data.message);
             } else {
-              self.$router.go({ name: 'groupList'});
+              self.$router.go({name: 'groupList'});
             }
           },
-
           error(error) {
             alert(JSON.stringify(error));
           }

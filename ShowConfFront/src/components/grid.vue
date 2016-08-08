@@ -102,8 +102,8 @@
   export default {
     // 表格的一些特殊操作
     partials: {
-      'listInfoPartial': "<a v-link=\"{name: 'detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
-              <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">Json</a>",
+      'listInfoPartial': "<a v-link=\"{name: 'conf_detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
+              <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">JSON</a>",
 
       'listOperatePartial': "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>",
 
@@ -123,7 +123,7 @@
     },
 
     data() {
-      var sortOrders = {}
+      let sortOrders = {}
       this.columns.forEach(function (key) {
         sortOrders[key] = 1
       })
@@ -132,7 +132,6 @@
         sortOrders: sortOrders,
         // 每页的行数
         perPage: 15,
-
         currentPage: 1,
       }
     },
@@ -144,9 +143,9 @@
       },
 
       pageData() {
-        var start = (this.currentPage - 1) * this.perPage;
-        var end = this.currentPage * this.perPage;
-        var realEnd = end > this.filteredData.length ? this.filteredData.length : end;
+        let start = (this.currentPage - 1) * this.perPage;
+        let end = this.currentPage * this.perPage;
+        let realEnd = end > this.filteredData.length ? this.filteredData.length : end;
 
         return _.slice(this.filteredData, start, realEnd);
       },
@@ -156,7 +155,6 @@
         this.currentPage = 1;
         return _.ceil(this.filteredData.length * 1.0 / this.perPage);
       },
-
     },
 
     methods: {
@@ -171,19 +169,19 @@
       },
 
       nextPage() {
-        var current = this.currentPage;
-        var total = this.total;
+        let current = this.currentPage;
+        let total = this.total;
         this.currentPage =  current + 1 > total ? total : current + 1;
       },
 
       gotoPage(page) {
-        var total = this.total;
+        let total = this.total;
         this.currentPage =  page > total || page < 1 ? 1 : page;
       },
 
       prePage() {
-        var current = this.currentPage;
-        var total = this.total;
+        let current = this.currentPage;
+        let total = this.total;
         this.currentPage =  current - 1 < 1 ? 1 : current - 1;
       }
 

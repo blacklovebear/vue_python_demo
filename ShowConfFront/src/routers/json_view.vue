@@ -48,13 +48,15 @@
       },
 
       toggle_highlight(event) {
-        var value = $('.highlight-kw').val();
-        var status = $(event.toElement).attr('status');
+        let value = $('.highlight-kw').val();
+        let status = $(event.toElement).attr('status');
+        let jsonContentEle = $('#json-content');
+
         if (status === '0') {
-          $('#json-content').highlight(value);
+          jsonContentEle.highlight(value);
           $(event.toElement).attr('status', '1');
         } else {
-          $('#json-content').unhighlight(value);
+          jsonContentEle.unhighlight(value);
           $(event.toElement).attr('status', '0');
         }
       },
@@ -65,8 +67,9 @@
     },
 
     ready() {
-      var self = this;
-      var conf_id = $('#json-content').attr('conf-id');
+      let self = this;
+      let jsonContentEle = $('#json-content');
+      let conf_id = jsonContentEle.attr('conf-id');
 
       $.ajax({
         url: config.baseUrl + '/parse/conf/' + conf_id ,
@@ -74,14 +77,14 @@
         success(data) {
           // 文件信息
           self.confInfo = data.file_info;
-          $('#json-content').JSONView(data.json);
+          jsonContentEle.JSONView(data.json);
 
           setTimeout(function(){
             // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
-            $('#json-content').link('a\\w+-[\\w]+-[\\w]+', "#!/index?no_cache=1&kw=");
+            jsonContentEle.link('a\\w+-[\\w]+-[\\w]+', "#!/?no_cache=1&kw=");
 
             // 如果关键字为空就没必要高亮
-            var value = $('.highlight-kw').val();
+            let value = $('.highlight-kw').val();
             if (value) {
               $('#highlight-toggle').trigger('click');
             }

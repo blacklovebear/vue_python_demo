@@ -78,7 +78,7 @@
       },
 
       buildTree(valueData) {
-        var self = this;
+        let self = this;
         self.tree = new TreeView(valueData, 'tree');
 
         self.tree.on('select', (e) => {

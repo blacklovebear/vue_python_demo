@@ -57,13 +57,15 @@
       },
 
       toggle_highlight(event) {
-        var value = $('.highlight-kw').val();
-        var status = $(event.toElement).attr('status');
+        let value = $('.highlight-kw').val();
+        let status = $(event.toElement).attr('status');
+        let confDetailEle = $('#conf-detail');
+
         if (status === '0') {
-          $('#conf-detail').highlight(value);
+          confDetailEle.highlight(value);
           $(event.toElement).attr('status', '1');
         } else {
-          $('#conf-detail').unhighlight(value);
+          confDetailEle.unhighlight(value);
           $(event.toElement).attr('status', '0');
         }
       },
@@ -85,8 +87,10 @@
     },
 
     ready() {
-      var self = this;
-      var conf_id = $('#conf-detail').attr('conf-id');
+      let self = this;
+      let confDetailEle = $('#conf-detail');
+
+      let conf_id = confDetailEle.attr('conf-id');
       $.ajax({
         url: config.baseUrl + '/confs/' + conf_id ,
         method: 'GET',
@@ -96,10 +100,10 @@
 
           setTimeout(function(){
             // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
-            $('#conf-detail').link('a\\w+-[\\w]+-[\\w]+', "#!/index?no_cache=1&kw=");
+            confDetailEle.link('a\\w+-[\\w]+-[\\w]+', "#!/?no_cache=1&kw=");
 
             // 如果关键字为空就没必要高亮
-            var value = $('.highlight-kw').val();
+            let value = $('.highlight-kw').val();
             if (value) {
               $('#highlight-toggle').trigger('click');
             }
