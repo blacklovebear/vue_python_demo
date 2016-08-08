@@ -9,7 +9,7 @@ module.exports = {
     // 入口
     entry: {
         main: './src/main',
-        vendors: ['vue', 'vue-router', 'jquery', 'lodash']
+        vendors: ['jquery', 'lodash']
     },
     // 输出
     output: {
@@ -79,6 +79,6 @@ module.exports = {
         }),
 
         new ExtractTextPlugin("[name].css",{ allChunks : true,resolve : ['modules'] }),
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     ]
 };

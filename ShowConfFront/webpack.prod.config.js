@@ -15,7 +15,9 @@ config.plugins = (config.plugins || []).concat([
         compress: {
             warnings: false
         }
-    })
+    }),
+
+    new webpack.optimize.DedupePlugin(),
 ]);
 
 module.exports = config;
