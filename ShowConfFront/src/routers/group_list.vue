@@ -8,17 +8,15 @@
   <div>
     <!-- Example row of columns -->
     <div class="row" style="margin-top:15px">
-      <h2 class="sub-header col-md-5">分组列表</h2>
+      <h2 class="sub-header col-md-5">Group List</h2>
       <span class="col-md-1 col-md-offset-6">
-        <button class="btn btn-primary" v-on:click="add()">添加</button>
+        <button class="btn btn-primary" v-on:click="add()">Add</button>
       </span>
     </div>
     <hr>
     <div class="row">
       <div class="col-md-4">
         <div class="form-inline form-group">
-          <label>表格内搜索:</label>
-
           <div class="inner-addon right-addon display-one-line">
             <i class="glyphicon glyphicon-search"></i>
             <input v-model="searchQuery" type="text" class="form-control" placeholder="search" />
@@ -68,9 +66,9 @@
         searchQuery: '',
 
         gridColumns: ['name', 'is_leaf', 'conf_file_path', 'parent_name', 'comment', 'operate'],
-        gridDisplayNames: {name: '分组名称', conf_file_path:'配置文件路径',
-                           parent_name:"父节点名称", is_leaf: '是否为叶子分组',
-                           comment: '备注信息', operate: '操作'
+        gridDisplayNames: {name: 'Group Name', conf_file_path:'Configure Path',
+                           parent_name:"Parent Name", is_leaf: 'Is Leaf',
+                           comment: 'Comment', operate: 'Operation'
                           },
         moreOperation: {
           operate: 'groupOperatePartial',
@@ -90,7 +88,7 @@
 
       handleDeleteRow(groupId) {
         let self = this;
-        let conclusion = confirm('确定删除?');
+        let conclusion = confirm('Are you sure?');
         if (!conclusion) {
           return
         }

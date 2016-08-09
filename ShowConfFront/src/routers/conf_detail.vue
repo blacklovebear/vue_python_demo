@@ -6,29 +6,29 @@
 </style>
 <template>
   <div>
-    <h2 class="sub-header" style="display:inline-block">配置文件详情</h2>
+    <h2 class="sub-header" style="display:inline-block">Configure Detail</h2>
     <span class="conf-explain">
-      主机：{{confInfo.host_domain}} 文件路径：{{confInfo.conf_file_path}}
+      Host: {{confInfo.host_domain}}; File Path: {{confInfo.conf_file_path}}
     </span>
 
     <div class="row">
       <div class="col-md-4">
         <div class="input-group">
-          <input type="text" class="form-control highlight-kw" placeholder="高亮关键字" value="{{$route.query.kw}}">
+          <input type="text" class="form-control highlight-kw" placeholder="keyword" value="{{$route.query.kw}}">
           <span class="input-group-btn">
             <button class="btn btn-default" id="highlight-toggle" type="button" status="0"
-                    v-on:click.stop.prevent="toggle_highlight($event)">高亮/取消</button>
+                    v-on:click.stop.prevent="toggle_highlight($event)">Highlight toggle</button>
           </span>
         </div>
       </div>
 
       <div class="col-md-2 col-md-offset-5">
         <button class="btn btn-primary" type="button"
-                v-on:click.stop.prevent="loadFileContent($route.params.conf_id)">重新加载配置文件</button>
+                v-on:click.stop.prevent="loadFileContent($route.params.conf_id)">Reload Configure</button>
       </div>
 
       <div class="col-md-1">
-        <button class="btn btn-primary" type="button" v-on:click.stop.prevent="back()">返回</button>
+        <button class="btn btn-primary" type="button" v-on:click.stop.prevent="back()">Return</button>
       </div>
     </div>
 
@@ -99,7 +99,7 @@
           self.fileLoadResult = data.load_result;
 
           setTimeout(function(){
-            // 为内容中的yunba.io的机器添加链接, 第二个参数为link的 href
+            // 为内容中的yunba.io的机器Add链接, 第二个参数为link的 href
             confDetailEle.link('a\\w+-[\\w]+-[\\w]+', "#!/?no_cache=1&kw=");
 
             // 如果关键字为空就没必要高亮

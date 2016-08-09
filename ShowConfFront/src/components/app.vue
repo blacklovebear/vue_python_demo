@@ -12,21 +12,21 @@
     <ul class="sidebar-nav">
       <li class="sidebar-brand">
         <a href="#">
-            配置管理
+            Configure Display
         </a>
       </li>
       <li>
-        <a v-link="{name: 'index'}">配置文件列表</a>
+        <a v-link="{name: 'index'}">Configure List</a>
       </li>
       <li>
-        <a v-link="{name: 'groupList'}">分组列表</a>
+        <a v-link="{name: 'groupList'}">Group List</a>
       </li>
 
     </ul>
   </div>
 
   <div id="page-content-wrapper">
-    <a href="#menu-toggle" id="menu-toggle" v-on:click.stop.prevent="toggleClass()">侧边栏显隐</a>
+    <a href="#menu-toggle" id="menu-toggle" v-on:click.stop.prevent="toggleClass()">Sidebar toggle</a>
     <router-view></router-view>
   </div>
 </div>

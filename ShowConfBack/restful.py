@@ -101,7 +101,7 @@ class Conf(Resource):
   def post(self, id):
     args = self.parser.parse_args()
     if not args.get('group_id'):
-      return util.get_return_info(False, u'必须选择一个分组')
+      return util.get_return_info(False, u'Must select a group')
 
     sql = """ insert into conf_file_info(host_domain, host_ip, host_user_name, ssh_key_path,
                                   host_pass, comment, last_ch_time, group_id)
@@ -117,7 +117,7 @@ class Conf(Resource):
     args['id'] = id
 
     if not args.get('group_id'):
-      return util.get_return_info(False, u'必须选择一个分组')
+      return util.get_return_info(False, u'Must select a group')
 
     sql = """ update conf_file_info set host_domain = %(host_domain)s, host_ip = %(host_ip)s,
                                         host_user_name = %(host_user_name)s, ssh_key_path = %(ssh_key_path)s,
@@ -139,7 +139,7 @@ class ParseConf(Resource):
   """将erl的配置文件信息解析成json格式
   """
   def get(self, id):
-    final = {'json':{'data':u'文件内容为空，请查看详情'}, 'file_info':{}}
+    final = {'json':{'data':u'File content is null, please select [Detail]'}, 'file_info':{}}
     sql = common_sql_content + ' where a.id = %s'
 
     file_info = util.db_fetchone(pool, sql, (id, ) )
@@ -232,7 +232,7 @@ class GroupSearch(Resource):
     return children
 
   def _add_all_group_item(self, final):
-    final.insert(0, {'name':'所有分组', 'id':0, 'children':[]})
+    final.insert(0, {'name':'All Group', 'id':0, 'children':[]})
     return final
 
   def get(self):
@@ -256,7 +256,7 @@ class GroupSection(Resource):
   """对列表进行编辑的是否，选择所属父级
   """
   def get(self):
-    sql = """ select 0 id, '没有父分组' text
+    sql = """ select 0 id, 'No Parent' text
                union all
               select a.id, a.name text
                 from conf_group a

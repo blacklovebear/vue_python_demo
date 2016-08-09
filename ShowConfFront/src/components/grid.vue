@@ -102,12 +102,11 @@
   export default {
     // 表格的一些特殊操作
     partials: {
-      'listInfoPartial': "<a v-link=\"{name: 'conf_detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">详情</a>| \
-              <a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">JSON</a>",
+      'listInfoPartial': "<a v-link=\"{name: 'conf_detail', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">Detail</a><a v-link=\"{name: 'jsonview', params: {conf_id: entry[key]}, query:{kw: keyWord}}\">|JSON</a>",
 
-      'listOperatePartial': "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>",
+      'listOperatePartial': "<a v-link=\"{name: 'confInfo', query:entry }\">Edit</a>",
 
-      'groupOperatePartial': "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>\
+      'groupOperatePartial': "<a v-link=\"{name: 'groupInfo', query:entry }\">Edit</a>\
                     <a v-if=\"entry.is_leaf == 'true'\" v-on:click.stop.prevent=\"loadConfByGroup(entry.id)\">|Reload Conf</a>"
     },
 
@@ -119,7 +118,7 @@
       filterKey: String,
       displayNames:Object,
       moreOperation: Object,
-      // 文件内容搜索关键字，只为给详情链接使用
+      // 文件内容搜索关键字，只为给Detail链接使用
       keyWord:String
     },
 
@@ -174,8 +173,7 @@
           url: config.baseUrl + '/upate/conf/by/group/' + groupId ,
           method: 'GET',
           success(data) {
-            if (data.code < 0)
-              console.error(data.message);
+            alert(data.message);
           },
           error(error) {
             alert(JSON.stringify(error));

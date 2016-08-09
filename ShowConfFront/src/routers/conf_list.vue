@@ -10,17 +10,15 @@
   <div>
     <!-- Example row of columns -->
     <div class="row" style="margin-top:15px">
-      <h2 class="sub-header col-xs-5">配置文件列表</h2>
+      <h2 class="sub-header col-xs-5">Configure List</h2>
       <span class="col-xs-1 col-xs-offset-6">
-        <button class="btn btn-primary" v-on:click="add()">添加</button>
+        <button class="btn btn-primary" v-on:click="add()">Add</button>
       </span>
     </div>
     <hr>
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-xs-3">
             <div class="form-inline form-group">
-              <label class="control-label">表格:</label>
-
               <div class="inner-addon right-addon display-one-line">
                 <i class="glyphicon glyphicon-search"></i>
                 <input v-model="searchQuery" type="text" class="form-control" placeholder="search" value="{{$route.query.kw}}"/>
@@ -32,9 +30,9 @@
           <group-search :group.sync="group" v-on:group-change="handleGroupChange" :search-text="groupText"></group-search>
         </div>
 
-        <div class="col-xs-4">
+        <div class="col-xs-5">
             <div class="form-inline form-group" style="text-align:right">
-              <label class="control-label">文件内容:</label>
+              <label class="control-label">File Content:</label>
               <div class="inner-addon right-addon display-one-line">
                 <i class="glyphicon glyphicon-search"></i>
                 <input v-model="keyWord" type="text" class="form-control" placeholder="search" />
@@ -80,14 +78,14 @@
         searchQuery: '',
         keyWord:'',
         group: 0,
-        groupText: '请选择一个分组',
+        groupText: 'Select group',
         gridColumns: ['host_domain', 'conf_file_path', 'group_name', 'last_ch_time', 'id', 'operate'],
-        gridDisplayNames: { host_domain: "所在服务器",
-                            conf_file_path: '配置文件路径',
-                            group_name: '所属分组名',
-                            last_ch_time: '最近同步时间',
-                            id: '查看',
-                            operate: '操作',
+        gridDisplayNames: { host_domain: "Host Domain",
+                            conf_file_path: 'File Path',
+                            group_name: 'Group',
+                            last_ch_time: 'Last Sync',
+                            id: 'See',
+                            operate: 'Operation',
                           },
         moreOperation:{
           id: "listInfoPartial",
@@ -162,7 +160,7 @@
         // do nothing
       } else {
         this.group = localStorage.getItem('index_group') || 0;
-        this.groupText = localStorage.getItem('index_group_name') || '请选择一个分组';
+        this.groupText = localStorage.getItem('index_group_name') || 'Select group';
       }
 
       this.loadConfFileData();

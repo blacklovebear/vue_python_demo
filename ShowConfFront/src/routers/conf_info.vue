@@ -13,9 +13,9 @@
 <template>
   <div>
     <div class="row" style="margin-top:15px">
-      <h2 class="sub-header col-md-5">文件信息</h2>
+      <h2 class="sub-header col-md-5">Configure Info</h2>
       <span class="col-md-1 col-md-offset-6">
-        <button class="btn btn-primary" v-on:click="back()">返回</button>
+        <button class="btn btn-primary" v-on:click="back()">Return</button>
       </span>
     </div>
 
@@ -23,55 +23,55 @@
 
     <form>
       <div class="form-group row">
-        <label for="host_domain" class="col-sm-2 form-control-label">所在机器域名</label>
+        <label for="host_domain" class="col-sm-2 form-control-label">Host Domain</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="host_domain" v-model="fileInfo.host_domain" placeholder="eg:abj-elogic-test1.yunba.io">
           <small class="text-muted">
-            和机器IP任选一个
+            Alternative with IP
           </small>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="host_ip" class="col-sm-2 form-control-label">所在机器IP</label>
+        <label for="host_ip" class="col-sm-2 form-control-label">IP</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="host_ip" v-model="fileInfo.host_ip" placeholder="127.0.0.1">
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="host_user_name" class="col-sm-2 form-control-label">机器用户名<i class="text-muted">*</i></label>
+        <label for="host_user_name" class="col-sm-2 form-control-label">User name<i class="text-muted">*</i></label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="host_user_name" v-model="fileInfo.host_user_name" placeholder="yunba">
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="ssh_key_path" class="col-sm-2 form-control-label">SSH key所在路径</label>
+        <label for="ssh_key_path" class="col-sm-2 form-control-label">SSH Key Path</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="ssh_key_path" v-model="fileInfo.ssh_key_path" placeholder="/Users/weizhiyun078/.ssh/id_rsa">
           <small class="text-muted">
-            和用户密码任填一个
+            Alternative with Password
           </small>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="host_pass" class="col-sm-2 form-control-label">用户密码</label>
+        <label for="host_pass" class="col-sm-2 form-control-label">Password</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" id="host_pass" v-model="fileInfo.host_pass" placeholder="密码">
+          <input type="password" class="form-control" id="host_pass" v-model="fileInfo.host_pass" placeholder="password">
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="comment" class="col-sm-2 form-control-label">备注信息</label>
+        <label for="comment" class="col-sm-2 form-control-label">Comment</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" id="comment" v-model="fileInfo.comment" placeholder="备注">
+          <input type="text" class="form-control" id="comment" v-model="fileInfo.comment" placeholder="">
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="group" class="col-sm-2 form-control-label">分组</label>
+        <label for="group" class="col-sm-2 form-control-label">Group</label>
         <div class="col-sm-6">
           <group-search :group.sync="fileInfo.group_id" :search-text="fileInfo.group_name"></group-search>
         </div>
@@ -80,7 +80,7 @@
 
       <div class="form-group row">
         <div class="col-sm-offset-2 col-sm-6">
-          <button type="button" class="btn btn-primary" v-on:click.prevent="onSubmit()">提交</button>
+          <button type="button" class="btn btn-primary" v-on:click.prevent="onSubmit()">Submit</button>
         </div>
       </div>
     </form>
@@ -111,7 +111,7 @@
           group_id: 0,
           group_name: ''
         },
-        // 最终返回状态
+        // 最终Return状态
         status:{},
       }
     },
@@ -149,7 +149,7 @@
     },
 
     ready() {
-      // 表示修改，会传当前记录的信息过来
+      // 表示Edit，会传当前记录的信息过来
       if (this.$route.query){
         _.merge(this.fileInfo, this.$route.query);
       }
