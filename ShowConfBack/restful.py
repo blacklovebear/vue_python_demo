@@ -175,6 +175,19 @@ class LoadConf(Resource):
     return final
 
 
+class UpdateConfContentByGroup(Resource):
+  """根据分组更新，分组下的配置文件内容
+  """
+  def get(self, group_id):
+    sql = """ update conf_file_info set conf_content = null where group_id = %s """
+    try:
+      util.db_execute(pool, sql, (group_id,))
+      final = util.get_return_info(True)
+    except Exception, e:
+      final = util.get_return_info(False, str(e))
+
+    return final
+
 class GroupSearch(Resource):
   """分组选择查询接口，分层级
   """
@@ -255,16 +268,31 @@ class GroupSection(Resource):
 class GroupList(Resource):
   """分组列表，用于页面展示
   """
+  def __init__(self):
+    self.parser = reqparse.RequestParser()
+    self.parser.add_argument('is_leaf', type=int)
+    super(GroupList, self).__init__()
+
   def get(self):
+    args = self.parser.parse_args()
+
+    if args.get('is_leaf') == 1:
+      where_condition = "where b.descendant_id is null"
+    elif args.get('is_leaf') == 2:
+      where_condition = "where b.descendant_id is not null"
+    else:
+      where_condition = ''
+
     sql = """ select distinct a.id, a.name, a.comment, a.conf_file_path, a.parent, c.name as parent_name,
-               (case when b.descendant_id > 0 then 'false' else 'true' end) as is_leaf
+               (case when b.descendant_id is null then 'true' else 'false' end) as is_leaf
                 from conf_group a
                 left join conf_group_relation b
                   on a.id = b.ancestor_id
                  and b.ancestor_id <> b.descendant_id
                 left join conf_group c
                   on a.parent = c.id
-               order by a.name"""
+                  %s
+               order by a.name""" % where_condition
     result = util.db_fetchall(pool, sql)
     return {'data': result}
 
@@ -378,6 +406,8 @@ api.add_resource(Conf, '/confs/<int:id>', endpoint = 'conf')
 
 api.add_resource(ParseConf, '/parse/conf/<int:id>', endpoint = 'parse_conf')
 api.add_resource(LoadConf, '/load/conf/<int:id>', endpoint = 'load_conf')
+
+api.add_resource(UpdateConfContentByGroup, '/upate/conf/by/group/<int:group_id>', endpoint = 'update_conf_by_group')
 
 api.add_resource(GroupSearch, '/group/search', endpoint = 'group_search')
 api.add_resource(GroupSection, '/group/section', endpoint = 'group_section')

@@ -107,7 +107,8 @@
 
       'listOperatePartial': "<a v-link=\"{name: 'confInfo', query:entry }\">修改</a>",
 
-      'groupOperatePartial': "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>"
+      'groupOperatePartial': "<a v-link=\"{name: 'groupInfo', query:entry }\">修改</a>\
+                    <a v-if=\"entry.is_leaf == 'true'\" v-on:click.stop.prevent=\"loadConfByGroup(entry.id)\">|Reload Conf</a>"
     },
 
     replace: true,
@@ -166,6 +167,21 @@
       // 删除一行数据
       deleteRow(id) {
         this.$dispatch('delete-row', id);
+      },
+
+      loadConfByGroup(groupId) {
+        $.ajax({
+          url: config.baseUrl + '/upate/conf/by/group/' + groupId ,
+          method: 'GET',
+          success(data) {
+            if (data.code < 0)
+              console.error(data.message);
+          },
+          error(error) {
+            alert(JSON.stringify(error));
+          }
+        });
+
       },
 
       nextPage() {

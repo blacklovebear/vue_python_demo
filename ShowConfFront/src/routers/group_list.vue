@@ -26,6 +26,14 @@
 
         </div>
       </div>
+      <div class="col-md-2">
+        <select class="form-control" v-model="isLeaf" v-on:change="loadConfFileData()">
+          <option value="0">All</option>
+          <option value="1">Only Leaf</option>
+          <option value="2">Not Leaf</option>
+        </select>
+      </div>
+
     </div>
 
     <div class="table-responsive">
@@ -70,6 +78,8 @@
         // 表格数据
         gridData: [],
 
+        isLeaf: 0,
+
       }
     },
 
@@ -108,6 +118,7 @@
         $.ajax({
           url: url,
           method: 'GET',
+          data:{is_leaf: self.isLeaf},
           success(data) {
             self.gridData = data.data;
           },
