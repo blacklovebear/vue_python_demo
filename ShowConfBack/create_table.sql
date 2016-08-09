@@ -1,7 +1,9 @@
 -- 新建yunba用户
 CREATE USER 'yunba'@'localhost' IDENTIFIED BY 'yunba321';
+GRANT ALL PRIVILEGES ON *.* TO 'yunba'@'localhost' WITH GRANT OPTION;
 
-GRANT ALL PRIVILEGES ON * . * TO 'yunba'@'localhost';
+CREATE USER 'yunba'@'%' IDENTIFIED BY 'yunba321';
+GRANT ALL PRIVILEGES ON *.* TO 'yunba'@'%' WITH GRANT OPTION;
 
 FLUSH PRIVILEGES;
 

@@ -8,7 +8,7 @@ import erl_terms
 import util
 import config
 
-import sys
+import sys, getopt
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding('UTF8')
 
@@ -48,11 +48,6 @@ def config_read_file(file_name):
   config.read(file_name)
 
 
-def parse_from_ini_file():
-  for section_name, section_value in config.items():
-    for field_name, field_value in section_value.items():
-      print field_name, ': ', field_value
-
 def get_conf_group():
   """获取分组数据
   """
@@ -71,6 +66,14 @@ def get_conf_group():
       group_list.append((section_name,))
   # 去掉第一个u'DEFAULT'
   return list(set(group_list[1:]))
+
+
+def truncate_tables():
+  sql_list = ['DELETE FROM %s' % table for table in
+                  ['conf_file_info', 'conf_group_relation', 'conf_group']]
+
+  util.db_trans_execute(pool, sql_list, [(),(),()])
+
 
 def insert_group_data(group_list):
   sql = """ insert into conf_group(name) values(%s) """
@@ -150,7 +153,7 @@ def set_conf_file_path_for_group():
   sql ="""
     update conf_group
     set conf_file_path = %s
-    where parent in (select id from conf_group where name like %s)
+    where parent in (select id from (select * from conf_group) a where name like %s)
     and id not in( select distinct ancestor_id from conf_group_relation )  """
 
   for key, value in config.items():
@@ -170,11 +173,16 @@ def update_conf_file_ssh_key():
   util.db_execute(pool, sql)
 
 
-if __name__ == '__main__':
-  trans_origin_text_to_ini('origin.txt', 'final.ini')
+def run(ansible_file):
+  trans_origin_text_to_ini(ansible_file, 'final.ini')
   config_read_file('final.ini')
 
   group_list = get_conf_group()
+
+  if not group_list:
+    sys.exit()
+
+  truncate_tables()
   insert_group_data(group_list)
 
   connect_list = get_connect_child_and_parent_list()
@@ -190,6 +198,24 @@ if __name__ == '__main__':
 
   update_conf_file_ssh_key()
 
+def main(argv):
+  ansible_file = ''
+  try:
+    opts, args = getopt.getopt(argv,"hc:",["config="])
+  except getopt.GetoptError:
+    print 'load_conf_info.py -c <ansible_conf_file>'
+    sys.exit(2)
+
+  for opt, arg in opts:
+    if opt == '-h':
+      print 'load_conf_info.py -c <ansible_conf_file>'
+      sys.exit()
+    elif opt in ("-c", "--config"):
+      run(arg)
+
+
+if __name__ == '__main__':
+  main(sys.argv[1:])
 
 
 
