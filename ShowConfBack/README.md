@@ -40,9 +40,28 @@ server = {
 }
 ```
 
-##运行
+##本地运行
 ```
 sudo python run.py
+```
+
+##线上部署
+```
+线上采取 supervisor + gunicorn + tornado的方式部署
+详细部署参考supervisor的配置文件 /etc/supervisor/supervisor.conf
+
+[program:config_display]
+process_name=%(program_name)s
+numprocs=1
+user=yunba
+command=gunicorn -k tornado -w4 -b 123.56.235.126:8888 restful:app                      ; supervisor启动命令
+directory=/home/yunba/configure_display/ShowConfBack
+startsecs=0                                                                             ; 启动时间
+stopwaitsecs=0                                                                          ; 终止等待时间
+autostart=true                                                                          ; 是否自动启动
+autorestart=true                                                                        ; 是否自动重启
+stdout_logfile=/home/yunba/configure_display/log/output.log                             ; log 日志
+stderr_logfile=/home/yunba/configure_display/log/error.err
 ```
 
 ##访问
