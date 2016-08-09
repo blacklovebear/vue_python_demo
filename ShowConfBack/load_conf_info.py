@@ -4,7 +4,6 @@ import re
 import MySQLdb
 from  DBUtils.PooledDB import PooledDB
 
-import erl_terms
 import util
 import config
 
