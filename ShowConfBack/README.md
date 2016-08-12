@@ -45,6 +45,9 @@ server = {
 sudo python run.py
 ```
 
+##更新Ansible配置文件
+curl http://localhost:8888/ansible/upload --data-urlencode "file_content=`cat ./origin.txt`"
+
 ##线上部署
 ```
 线上采取 supervisor + gunicorn + tornado的方式部署

@@ -9,6 +9,7 @@ from  DBUtils.PooledDB import PooledDB
 
 import erl_terms
 import util
+from load_conf_info import AnsibleFileToDB
 import config
 
 import sys
@@ -398,6 +399,30 @@ class Group(Resource):
     return final
 
 
+
+class AnsibleUplad(Resource):
+  """上传Ansible的配置文件
+  """
+  def __init__(self):
+    self.parser = reqparse.RequestParser()
+    self.parser.add_argument('file_content', type=str)
+    super(AnsibleUplad, self).__init__()
+
+  def post(self):
+    args = self.parser.parse_args()
+
+    if args.get('file_content'):
+      try:
+        AnsibleFileToDB(pool).run_from_file_content(args.get('file_content'))
+      except Exception, e:
+        final = util.get_return_info(False, str(e))
+        return final
+
+    final = util.get_return_info(True)
+    return final
+
+
+
 # restful
 api = Api(app)
 
@@ -414,6 +439,8 @@ api.add_resource(GroupSection, '/group/section', endpoint = 'group_section')
 
 api.add_resource(GroupList, '/groups', endpoint = 'group_list')
 api.add_resource(Group, '/groups/<int:id>', endpoint = 'group')
+
+api.add_resource(AnsibleUplad, '/ansible/upload', endpoint = 'ansible_upload')
 
 
 
