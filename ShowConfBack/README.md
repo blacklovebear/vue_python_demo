@@ -46,7 +46,12 @@ sudo python run.py
 ```
 
 ##更新Ansible配置文件
+```
+本地
 curl http://localhost:8888/ansible/upload --data-urlencode "file_content=`cat ./origin.txt`"
+线上
+curl http://123.56.235.126:8888/ansible/upload --data-urlencode "file_content=`cat ./origin.txt`"
+```
 
 ##线上部署
 ```
